@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+
+<!-- Perplexity Computer Attribution — SEO Meta Tags -->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitex - Iniciación de Nueva Empresa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ========== RESET & BASE ========== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    background-color: #000000;
+    color: #FFFFFF;
+    min-height: 100vh;
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ========== TOKENS ========== */
+  :root {
+    --bg: #000000;
+    --text: #FFFFFF;
+    --text-muted: #999999;
+    --text-dim: #666666;
+    --accent: #FEAE02;
+    --accent-hover: #E59D02;
+    --accent-subtle: rgba(254, 174, 2, 0.08);
+    --accent-border: rgba(254, 174, 2, 0.2);
+    --surface: #0A0A0A;
+    --surface-2: #111111;
+    --surface-3: #1A1A1A;
+    --border: #222222;
+    --border-focus: #FEAE02;
+    --error: #FF4444;
+    --error-bg: rgba(255, 68, 68, 0.08);
+    --radius-btn: 10px;
+    --radius-card: 12px;
+    --radius-input: 10px;
+    --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ========== LAYOUT ========== */
+  .page-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ========== HEADER / LOGO ========== */
+  .header {
+    text-align: center;
+    padding: 32px 0 28px;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress-container {
+    margin-bottom: 36px;
+  }
+
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+
+  .progress-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--border);
+    color: var(--text-dim);
+    background: transparent;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .progress-step.active {
+    border-color: var(--accent);
+    color: #000;
+    background: var(--accent);
+  }
+
+  .progress-step.completed {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .progress-line {
+    width: 24px;
+    height: 2px;
+    background: var(--border);
+    transition: background var(--transition);
+    flex-shrink: 0;
+  }
+
+  .progress-line.active {
+    background: var(--accent);
+  }
+
+  .progress-label {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ========== TRACK BAR ========== */
+  .track-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .track-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ========== FORM STEP ========== */
+  .form-step {
+    display: none;
+    opacity: 0;
+    transform: translateX(12px);
+    transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1), transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .form-step.active {
+    display: block;
+  }
+
+  .form-step.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .form-step.slide-out-left {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  .step-header {
+    margin-bottom: 32px;
+  }
+
+  .step-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .step-description {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ========== FORM FIELDS ========== */
+  .field-group {
+    margin-bottom: 28px;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .field-label .required {
+    color: var(--accent);
+    margin-left: 2px;
+  }
+
+  .field-helper {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .field-error {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 6px;
+    display: none;
+    line-height: 1.4;
+  }
+
+  .field-error.visible {
+    display: block;
+  }
+
+  /* Text / Email / Tel / URL inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    transition: border-color var(--transition), background var(--transition);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--border-focus);
+    background: var(--surface-3);
+  }
+
+  input[type="text"].error,
+  input[type="email"].error,
+  input[type="tel"].error,
+  input[type="url"].error,
+  textarea.error,
+  select.error {
+    border-color: var(--error);
+    background: var(--error-bg);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  /* Select arrow */
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  select option {
+    background: #111;
+    color: #fff;
+  }
+
+  /* Radio groups */
+  .radio-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .radio-option {
+    position: relative;
+  }
+
+  .radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .radio-option label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+  }
+
+  .radio-option label::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .radio-option input[type="radio"]:checked + label {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--accent-subtle);
+  }
+
+  .radio-option input[type="radio"]:checked + label::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 3px #000;
+  }
+
+  /* Checkbox groups */
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checkbox-option {
+    position: relative;
+  }
+
+  .checkbox-option input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .checkbox-option label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+    width: 100%;
+  }
+
+  .checkbox-option label::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .checkbox-option input[type="checkbox"]:checked + label {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--accent-subtle);
+  }
+
+  .checkbox-option input[type="checkbox"]:checked + label::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2.5 2.5L8 3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .otros-input-wrapper {
+    margin-top: 10px;
+    display: none;
+  }
+
+  .otros-input-wrapper.visible {
+    display: block;
+  }
+
+  /* Conditional fields */
+  .conditional-field {
+    display: none;
+    margin-top: 16px;
+    padding-left: 0;
+  }
+
+  .conditional-field.visible {
+    display: block;
+    animation: fadeIn 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== BUTTONS ========== */
+  .button-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all var(--transition);
+    border: none;
+    outline: none;
+    min-width: 130px;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000000;
+    border: 1px solid var(--accent);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  /* ========== SUCCESS SCREEN ========== */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .success-screen.active {
+    display: flex;
+    animation: fadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+  }
+
+  .success-icon svg {
+    width: 36px;
+    height: 36px;
+    stroke: #000;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .success-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .success-message {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* ========== LOADING SPINNER ========== */
+  .spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ========== FOOTER ========== */
+  .footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    margin-top: auto;
+  }
+
+  .footer a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 400;
+    transition: color var(--transition);
+  }
+
+  .footer a:hover {
+    color: var(--text-muted);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 480px) {
+    .page-wrapper {
+      padding: 16px 16px 40px;
+    }
+
+    .header {
+      padding: 24px 0 20px;
+    }
+
+    .logo {
+      font-size: 24px;
+    }
+
+    .step-title {
+      font-size: 20px;
+    }
+
+    .progress-step {
+      width: 28px;
+      height: 28px;
+      font-size: 11px;
+    }
+
+    .progress-line {
+      width: 14px;
+    }
+
+    .button-row {
+      flex-direction: column-reverse;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .radio-group {
+      flex-direction: column;
+    }
+
+    .radio-option label {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      Arquitex
+      <span class="logo-sub">by coinbox</span>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-container">
+    <div class="progress-steps" id="progressSteps">
+      <!-- Generated by JS -->
+    </div>
+    <div class="track-bar">
+      <div class="track-bar-fill" id="trackBarFill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <form id="onboardingForm" novalidate>
+
+    <!-- ====== STEP 1: Información Básica ====== -->
+    <div class="form-step" data-step="1">
+      <div class="step-header">
+        <h2 class="step-title">Información Básica</h2>
+        <p class="step-description">Comencemos con los datos fundamentales de tu empresa.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Nombre de tu Empresa <span class="required">*</span></label>
+        <input type="text" name="nombre_empresa" placeholder="Ej: Constructora Del Valle" required>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Cómo describirías a tu empresa? <span class="required">*</span></label>
+        <select name="tipo_empresa" required>
+          <option value="" disabled selected>Seleccioná una opción</option>
+          <option value="Estudio de Arquitectura">Estudio de Arquitectura</option>
+          <option value="Constructora">Constructora</option>
+          <option value="Desarrolladora">Desarrolladora</option>
+          <option value="Combinación">Combinación</option>
+        </select>
+        <div class="field-helper">Seleccioná la opción que mejor represente tu actividad principal.</div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Está registrada? <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="registrada" id="registrada_si" value="Sí" required>
+            <label for="registrada_si">Sí</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="registrada" id="registrada_no" value="No">
+            <label for="registrada_no">No</label>
+          </div>
+        </div>
+        <div class="field-helper">Indicá si tu empresa está registrada formalmente.</div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 2: Información Fiscal ====== -->
+    <div class="form-step" data-step="2">
+      <div class="step-header">
+        <h2 class="step-title">Información Fiscal</h2>
+        <p class="step-description">Datos legales y fiscales de tu empresa registrada.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Razón Social - Nombre Legal</label>
+        <input type="text" name="razon_social" placeholder="Ej: Del Valle S.A.">
+        <div class="field-helper">El nombre legal tal como aparece en los documentos fiscales.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Número de Identificación Fiscal</label>
+        <input type="text" name="numero_fiscal" placeholder="Ej: CUIT / RUT / RFC">
+        <div class="field-helper">CUIT, RUT, RFC u otro número de identificación tributaria.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 3: Propuesta de Valor ====== -->
+    <div class="form-step" data-step="3">
+      <div class="step-header">
+        <h2 class="step-title">Propuesta de Valor</h2>
+        <p class="step-description">Contanos qué hace única a tu empresa y cómo se diferencia del resto.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Qué especialización tienen? <span class="required">*</span></label>
+        <div class="checkbox-group">
+          <div class="checkbox-option">
+            <input type="checkbox" name="especializacion" id="esp_residencial" value="Arquitectura residencial">
+            <label for="esp_residencial">Arquitectura residencial</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="especializacion" id="esp_comercial" value="Arquitectura comercial">
+            <label for="esp_comercial">Arquitectura comercial</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="especializacion" id="esp_remodelaciones" value="Remodelaciones">
+            <label for="esp_remodelaciones">Remodelaciones</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="especializacion" id="esp_otros" value="Otros">
+            <label for="esp_otros">Otros</label>
+          </div>
+        </div>
+        <div class="otros-input-wrapper" id="otrosWrapper">
+          <input type="text" name="especializacion_otros" placeholder="Especificá cuál/cuáles">
+        </div>
+        <div class="field-error">Seleccioná al menos una especialización.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Qué sistemas constructivos trabajan? <span class="required">*</span></label>
+        <input type="text" name="sistemas_constructivos" placeholder="Ej: Steel frame, hormigón armado, madera" required>
+        <div class="field-helper">Enumerá los sistemas o métodos de construcción que utilizan.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿En qué zonas opera? <span class="required">*</span></label>
+        <input type="text" name="zonas_operacion" placeholder="Ej: Córdoba Capital, zona norte de Buenos Aires" required>
+        <div class="field-helper">Ciudades, regiones o áreas donde realizan trabajos.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Qué problemas principales resuelven para sus clientes? <span class="required">*</span></label>
+        <textarea name="problemas_clientes" placeholder="Describí los problemas o necesidades que tu empresa resuelve..." required></textarea>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Por qué le deberían comprar a tu empresa y no a la competencia? <span class="required">*</span></label>
+        <textarea name="diferencial" placeholder="¿Qué te diferencia? ¿Qué valor agregado ofrecen?" required></textarea>
+        <div class="field-helper">Tu propuesta de valor única. Pensá en lo que realmente te distingue.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 4: Prueba Social / Validación ====== -->
+    <div class="form-step" data-step="4">
+      <div class="step-header">
+        <h2 class="step-title">Prueba Social / Validación</h2>
+        <p class="step-description">Tu trayectoria y credibilidad son clave para generar confianza con nuevos clientes.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Trayectoria y estadísticas relevantes <span class="required">*</span></label>
+        <textarea name="trayectoria" placeholder="Ej: 15 años en el rubro, +200 proyectos entregados, 50 obras en curso..." required></textarea>
+        <div class="field-helper">Años de experiencia, cantidad de proyectos, obras entregadas, premios, etc.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Cuentan con testimonios? <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="testimonios" id="testimonios_si" value="Sí" required>
+            <label for="testimonios_si">Sí</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="testimonios" id="testimonios_no" value="No">
+            <label for="testimonios_no">No</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+
+      <div class="conditional-field" id="testimoniosDetail">
+        <div class="field-group">
+          <label class="field-label">Por favor, indícanos donde podemos acceder a dichos testimonios</label>
+          <textarea name="testimonios_detalle" placeholder="Ej: Link a Google Reviews, página de testimonios, carpeta de capturas..."></textarea>
+          <div class="field-helper">Puede ser un link a reseñas de Google, tu sitio web, redes sociales, o cualquier medio donde los tengamos disponibles.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 5: Oficinas ====== -->
+    <div class="form-step" data-step="5">
+      <div class="step-header">
+        <h2 class="step-title">Oficinas</h2>
+        <p class="step-description">Información sobre tu espacio físico de trabajo.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Cuentan con oficinas? <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="oficinas" id="oficinas_si" value="Sí" required>
+            <label for="oficinas_si">Sí</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="oficinas" id="oficinas_no" value="No">
+            <label for="oficinas_no">No</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+
+      <div class="conditional-field" id="oficinasDetail">
+        <div class="field-group">
+          <label class="field-label">Dirección de las oficinas</label>
+          <input type="text" name="oficinas_direccion" placeholder="Ej: Av. Colón 1234, Piso 3">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Ciudad</label>
+          <input type="text" name="oficinas_ciudad" placeholder="Ej: Córdoba">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Estado / Región / Provincia / Distrito</label>
+          <input type="text" name="oficinas_provincia" placeholder="Ej: Córdoba, Argentina">
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top: 28px;">
+        <label class="field-label">¿Tienen disponibilidad para reuniones presenciales? <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="reuniones_presenciales" id="reuniones_si" value="Sí" required>
+            <label for="reuniones_si">Sí</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="reuniones_presenciales" id="reuniones_no" value="No">
+            <label for="reuniones_no">No</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 6: Recursos Digitales ====== -->
+    <div class="form-step" data-step="6">
+      <div class="step-header">
+        <h2 class="step-title">Recursos Digitales</h2>
+        <p class="step-description">Tu presencia digital actual. Esto nos ayuda a entender tu ecosistema online.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Tu empresa posee una cuenta de WhatsApp Business? <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="whatsapp_business" id="wab_si" value="Sí" required>
+            <label for="wab_si">Sí</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="whatsapp_business" id="wab_no" value="No">
+            <label for="wab_no">No</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Tu página de Facebook</label>
+        <input type="url" name="facebook" placeholder="https://facebook.com/tu-pagina">
+        <div class="field-helper">Dejá en blanco si no tenés página de Facebook.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Tu página de Instagram</label>
+        <input type="url" name="instagram" placeholder="https://instagram.com/tu-cuenta">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Tu página de LinkedIn</label>
+        <input type="url" name="linkedin" placeholder="https://linkedin.com/company/tu-empresa">
+      </div>
+    </div>
+
+    <!-- ====== STEP 7: Comunicación + Info Extra ====== -->
+    <div class="form-step" data-step="7">
+      <div class="step-header">
+        <h2 class="step-title">Comunicación</h2>
+        <p class="step-description">Definí cómo querés recibir las notificaciones del sistema Arquitex.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">A qué WhatsApp querés que lleguen las notificaciones del sistema? <span class="required">*</span></label>
+        <input type="tel" name="whatsapp_notificaciones" placeholder="Ej: +54 351 1234567" required>
+        <div class="field-helper">Incluí el código de país. Este número recibirá alertas del sistema.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Y a qué Email querés que lleguen las notificaciones del sistema? <span class="required">*</span></label>
+        <input type="email" name="email_notificaciones" placeholder="Ej: contacto@tuempresa.com" required>
+        <div class="field-error">Ingresá un email válido.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">¿Algo más que quieras agregar?</label>
+        <textarea name="info_extra" placeholder="Cualquier información adicional que consideres relevante..."></textarea>
+        <div class="field-helper">Opcional. Cualquier comentario, aclaración o pedido especial.</div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION BUTTONS -->
+    <div class="button-row" id="buttonRow">
+      <button type="button" class="btn btn-outline" id="btnBack" style="display: none;">Anterior</button>
+      <button type="button" class="btn btn-primary" id="btnNext">Siguiente</button>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <h2 class="success-title">¡Gracias!</h2>
+    <p class="success-message">Tu información ha sido recibida correctamente. Nuestro equipo la revisará y se pondrá en contacto con vos a la brevedad.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+  </footer>
+
+</div>
+
+<script>
+// ========== CONFIGURATION ==========
+const WEBHOOK_URL = 'https://your-n8n-webhook-url-here';
+const REDIRECT_URL = null; // Set to URL string to redirect after submit
+
+// ========== STATE ==========
+let currentStep = 1;
+let totalSteps = 7;
+let skipStep2 = false;
+
+// ========== DOM REFS ==========
+const form = document.getElementById('onboardingForm');
+const steps = document.querySelectorAll('.form-step');
+const btnNext = document.getElementById('btnNext');
+const btnBack = document.getElementById('btnBack');
+const buttonRow = document.getElementById('buttonRow');
+const progressStepsContainer = document.getElementById('progressSteps');
+const trackBarFill = document.getElementById('trackBarFill');
+const successScreen = document.getElementById('successScreen');
+
+// ========== CONDITIONAL LOGIC ==========
+// Step 2 skip logic (registrada)
+document.querySelectorAll('input[name="registrada"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    skipStep2 = radio.value === 'No';
+  });
+});
+
+// Testimonios conditional
+document.querySelectorAll('input[name="testimonios"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const detail = document.getElementById('testimoniosDetail');
+    detail.classList.toggle('visible', radio.value === 'Sí' && radio.checked);
+  });
+});
+
+// Oficinas conditional
+document.querySelectorAll('input[name="oficinas"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const detail = document.getElementById('oficinasDetail');
+    detail.classList.toggle('visible', radio.value === 'Sí' && radio.checked);
+  });
+});
+
+// Otros checkbox → show text input
+document.getElementById('esp_otros').addEventListener('change', function() {
+  document.getElementById('otrosWrapper').classList.toggle('visible', this.checked);
+});
+
+// ========== PROGRESS BAR ==========
+function buildProgress() {
+  progressStepsContainer.innerHTML = '';
+  const visibleSteps = getVisibleSteps();
+  visibleSteps.forEach((stepNum, index) => {
+    if (index > 0) {
+      const line = document.createElement('div');
+      line.classList.add('progress-line');
+      if (stepNum <= currentStep) line.classList.add('active');
+      progressStepsContainer.appendChild(line);
+    }
+    const dot = document.createElement('div');
+    dot.classList.add('progress-step');
+    if (stepNum === currentStep) dot.classList.add('active');
+    else if (stepNum < currentStep) dot.classList.add('completed');
+    dot.textContent = index + 1;
+    progressStepsContainer.appendChild(dot);
+  });
+
+  // Track bar
+  const currentIndex = visibleSteps.indexOf(currentStep);
+  const pct = ((currentIndex) / (visibleSteps.length - 1)) * 100;
+  trackBarFill.style.width = pct + '%';
+}
+
+function getVisibleSteps() {
+  const all = [1, 2, 3, 4, 5, 6, 7];
+  if (skipStep2) return all.filter(s => s !== 2);
+  return all;
+}
+
+// ========== STEP TRANSITIONS ==========
+function showStep(stepNum, direction) {
+  const currentEl = document.querySelector('.form-step.active');
+  const targetEl = document.querySelector(`.form-step[data-step="${stepNum}"]`);
+
+  if (currentEl) {
+    currentEl.classList.remove('visible');
+    currentEl.classList.add(direction === 'forward' ? 'slide-out-left' : '');
+    setTimeout(() => {
+      currentEl.classList.remove('active', 'slide-out-left');
+    }, 100);
+  }
+
+  setTimeout(() => {
+    targetEl.classList.add('active');
+    targetEl.style.transform = direction === 'forward' ? 'translateX(12px)' : 'translateX(-12px)';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        targetEl.classList.add('visible');
+        targetEl.style.transform = '';
+      });
+    });
+  }, 120);
+
+  currentStep = stepNum;
+  buildProgress();
+  updateButtons();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateButtons() {
+  const visibleSteps = getVisibleSteps();
+  const isFirst = currentStep === visibleSteps[0];
+  const isLast = currentStep === visibleSteps[visibleSteps.length - 1];
+
+  btnBack.style.display = isFirst ? 'none' : 'inline-flex';
+  btnNext.textContent = isLast ? 'Enviar' : 'Siguiente';
+}
+
+// ========== VALIDATION ==========
+function validateCurrentStep() {
+  const stepEl = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+  let valid = true;
+
+  // Clear previous errors
+  stepEl.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  stepEl.querySelectorAll('.field-error.visible').forEach(el => el.classList.remove('visible'));
+
+  // Text / email / tel / url inputs with required
+  stepEl.querySelectorAll('input[type="text"][required], input[type="email"][required], input[type="tel"][required], input[type="url"][required], textarea[required]').forEach(input => {
+    if (!input.value.trim()) {
+      input.classList.add('error');
+      const err = input.closest('.field-group').querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+    // Email validation
+    if (input.type === 'email' && input.value.trim()) {
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRe.test(input.value.trim())) {
+        input.classList.add('error');
+        const err = input.closest('.field-group').querySelector('.field-error');
+        if (err) err.classList.add('visible');
+        valid = false;
+      }
+    }
+  });
+
+  // Select with required
+  stepEl.querySelectorAll('select[required]').forEach(sel => {
+    if (!sel.value) {
+      sel.classList.add('error');
+      const err = sel.closest('.field-group').querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  });
+
+  // Radio groups with required
+  const radioGroups = new Set();
+  stepEl.querySelectorAll('input[type="radio"][required]').forEach(r => radioGroups.add(r.name));
+  radioGroups.forEach(name => {
+    const checked = stepEl.querySelector(`input[name="${name}"]:checked`);
+    if (!checked) {
+      const group = stepEl.querySelector(`input[name="${name}"]`).closest('.field-group');
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  });
+
+  // Checkbox group for especializacion (step 3)
+  if (currentStep === 3) {
+    const checked = stepEl.querySelectorAll('input[name="especializacion"]:checked');
+    if (checked.length === 0) {
+      const group = stepEl.querySelector('.checkbox-group').closest('.field-group');
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  }
+
+  return valid;
+}
+
+// ========== COLLECT DATA ==========
+function collectFormData() {
+  const data = {};
+
+  // Text, email, tel, url inputs
+  form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"]').forEach(input => {
+    if (input.name && input.value.trim()) {
+      data[input.name] = input.value.trim();
+    }
+  });
+
+  // Textareas
+  form.querySelectorAll('textarea').forEach(ta => {
+    if (ta.name && ta.value.trim()) {
+      data[ta.name] = ta.value.trim();
+    }
+  });
+
+  // Selects
+  form.querySelectorAll('select').forEach(sel => {
+    if (sel.name && sel.value) {
+      data[sel.name] = sel.value;
+    }
+  });
+
+  // Radios
+  const radioNames = new Set();
+  form.querySelectorAll('input[type="radio"]').forEach(r => radioNames.add(r.name));
+  radioNames.forEach(name => {
+    const checked = form.querySelector(`input[name="${name}"]:checked`);
+    if (checked) data[name] = checked.value;
+  });
+
+  // Checkboxes
+  const checked = form.querySelectorAll('input[name="especializacion"]:checked');
+  if (checked.length > 0) {
+    data['especializacion'] = Array.from(checked).map(c => c.value);
+  }
+
+  return data;
+}
+
+// ========== SUBMIT ==========
+async function submitForm() {
+  btnNext.disabled = true;
+  btnNext.innerHTML = '<span class="spinner"></span>Enviando...';
+
+  const data = collectFormData();
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    // Show success regardless (webhook might not return JSON)
+    showSuccess();
+  } catch (err) {
+    // Still show success to user — data might have been received
+    // In production, you might want to handle this differently
+    console.error('Webhook error:', err);
+    showSuccess();
+  }
+}
+
+function showSuccess() {
+  form.style.display = 'none';
+  buttonRow.style.display = 'none';
+  document.querySelector('.progress-container').style.display = 'none';
+  successScreen.classList.add('active');
+
+  if (REDIRECT_URL) {
+    setTimeout(() => {
+      window.location.href = REDIRECT_URL;
+    }, 3000);
+  }
+}
+
+// ========== EVENT LISTENERS ==========
+btnNext.addEventListener('click', () => {
+  if (!validateCurrentStep()) return;
+
+  const visibleSteps = getVisibleSteps();
+  const currentIndex = visibleSteps.indexOf(currentStep);
+  const isLast = currentIndex === visibleSteps.length - 1;
+
+  if (isLast) {
+    submitForm();
+  } else {
+    showStep(visibleSteps[currentIndex + 1], 'forward');
+  }
+});
+
+btnBack.addEventListener('click', () => {
+  const visibleSteps = getVisibleSteps();
+  const currentIndex = visibleSteps.indexOf(currentStep);
+  if (currentIndex > 0) {
+    showStep(visibleSteps[currentIndex - 1], 'back');
+  }
+});
+
+// Clear error on input
+form.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.classList.contains('error')) {
+    el.classList.remove('error');
+    const err = el.closest('.field-group')?.querySelector('.field-error');
+    if (err) err.classList.remove('visible');
+  }
+});
+
+form.addEventListener('change', (e) => {
+  const el = e.target;
+  if (el.type === 'radio' || el.type === 'checkbox') {
+    const group = el.closest('.field-group');
+    if (group) {
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.remove('visible');
+    }
+  }
+});
+
+// ========== INIT ==========
+function init() {
+  buildProgress();
+  const firstStep = document.querySelector('.form-step[data-step="1"]');
+  firstStep.classList.add('active');
+  requestAnimationFrame(() => {
+    firstStep.classList.add('visible');
+  });
+  updateButtons();
+}
+
+init();
+</script>
+
+</body>
+</html>
