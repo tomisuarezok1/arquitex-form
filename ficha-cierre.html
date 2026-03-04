@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitex - Ficha de Cierre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ========== RESET & BASE ========== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    background-color: #000000;
+    color: #FFFFFF;
+    min-height: 100vh;
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ========== TOKENS ========== */
+  :root {
+    --bg: #000000;
+    --text: #FFFFFF;
+    --text-muted: #999999;
+    --text-dim: #666666;
+    --accent: #FEAE02;
+    --accent-hover: #E59D02;
+    --accent-subtle: rgba(254, 174, 2, 0.08);
+    --accent-border: rgba(254, 174, 2, 0.2);
+    --surface: #0A0A0A;
+    --surface-2: #111111;
+    --surface-3: #1A1A1A;
+    --border: #222222;
+    --border-focus: #FEAE02;
+    --error: #FF4444;
+    --error-bg: rgba(255, 68, 68, 0.08);
+    --radius-btn: 10px;
+    --radius-card: 12px;
+    --radius-input: 10px;
+    --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ========== LAYOUT ========== */
+  .page-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ========== HEADER / LOGO ========== */
+  .header {
+    text-align: center;
+    padding: 32px 0 28px;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .form-badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 16px;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .form-subtitle {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress-container {
+    margin-bottom: 36px;
+  }
+
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+
+  .progress-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--border);
+    color: var(--text-dim);
+    background: transparent;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .progress-step.active {
+    border-color: var(--accent);
+    color: #000;
+    background: var(--accent);
+  }
+
+  .progress-step.completed {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .progress-line {
+    width: 24px;
+    height: 2px;
+    background: var(--border);
+    transition: background var(--transition);
+    flex-shrink: 0;
+  }
+
+  .progress-line.active {
+    background: var(--accent);
+  }
+
+  /* ========== TRACK BAR ========== */
+  .track-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .track-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ========== FORM STEP ========== */
+  .form-step {
+    display: none;
+    opacity: 0;
+    transform: translateX(12px);
+    transition: opacity 350ms cubic-bezier(0.16, 1, 0.3, 1), transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .form-step.active {
+    display: block;
+  }
+
+  .form-step.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .form-step.slide-out-left {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  .form-step.slide-out-right {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  .step-header {
+    margin-bottom: 32px;
+  }
+
+  .step-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .step-description {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ========== FORM FIELDS ========== */
+  .field-group {
+    margin-bottom: 28px;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .field-label .required {
+    color: var(--accent);
+    margin-left: 2px;
+  }
+
+  .field-helper {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .field-error {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 6px;
+    display: none;
+    line-height: 1.4;
+  }
+
+  .field-error.visible {
+    display: block;
+  }
+
+  /* Text / Email / Tel / URL inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    transition: border-color var(--transition), background var(--transition);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--border-focus);
+    background: var(--surface-3);
+  }
+
+  input[type="text"].error,
+  input[type="email"].error,
+  input[type="tel"].error,
+  input[type="url"].error,
+  textarea.error,
+  select.error {
+    border-color: var(--error);
+    background: var(--error-bg);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  /* Radio groups */
+  .radio-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .radio-option {
+    position: relative;
+  }
+
+  .radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .radio-option label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+  }
+
+  .radio-option label::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .radio-option input[type="radio"]:checked + label {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--accent-subtle);
+  }
+
+  .radio-option input[type="radio"]:checked + label::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 3px #000;
+  }
+
+  /* Checkbox groups */
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checkbox-option {
+    position: relative;
+  }
+
+  .checkbox-option input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .checkbox-option label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+    width: 100%;
+  }
+
+  .checkbox-option label::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+
+  .checkbox-option input[type="checkbox"]:checked + label {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--accent-subtle);
+  }
+
+  .checkbox-option input[type="checkbox"]:checked + label::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2.5 2.5L8 3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .otros-input-wrapper {
+    margin-top: 10px;
+    display: none;
+  }
+
+  .otros-input-wrapper.visible {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== BUTTONS ========== */
+  .button-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all var(--transition);
+    border: none;
+    outline: none;
+    min-width: 130px;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000000;
+    border: 1px solid var(--accent);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  /* ========== SUCCESS SCREEN ========== */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .success-screen.active {
+    display: flex;
+    animation: fadeIn 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+  }
+
+  .success-icon svg {
+    width: 36px;
+    height: 36px;
+    stroke: #000;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .success-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .success-message {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* ========== LOADING SPINNER ========== */
+  .spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ========== FOOTER ========== */
+  .footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    margin-top: auto;
+  }
+
+  .footer a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 400;
+    transition: color var(--transition);
+  }
+
+  .footer a:hover {
+    color: var(--text-muted);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 480px) {
+    .page-wrapper {
+      padding: 16px 16px 40px;
+    }
+
+    .header {
+      padding: 24px 0 20px;
+    }
+
+    .logo {
+      font-size: 24px;
+    }
+
+    .step-title {
+      font-size: 20px;
+    }
+
+    .progress-step {
+      width: 28px;
+      height: 28px;
+      font-size: 11px;
+    }
+
+    .progress-line {
+      width: 14px;
+    }
+
+    .button-row {
+      flex-direction: column-reverse;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .radio-group {
+      flex-direction: column;
+    }
+
+    .radio-option label {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      Arquitex
+      <span class="logo-sub">by coinbox</span>
+    </div>
+    <div class="form-badge">Ficha de Cierre</div>
+    <p class="form-subtitle">Este documento será el Hand Off para el equipo de operaciones una vez se logre el cierre efectivo.</p>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-container">
+    <div class="progress-steps" id="progressSteps">
+      <!-- Generated by JS -->
+    </div>
+    <div class="track-bar">
+      <div class="track-bar-fill" id="trackBarFill" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <form id="cierreForm" novalidate>
+
+    <!-- ====== STEP 1: Datos del Cliente ====== -->
+    <div class="form-step" data-step="1">
+      <div class="step-header">
+        <h2 class="step-title">Datos del Cliente</h2>
+        <p class="step-description">Información básica del cliente y las personas involucradas en el proyecto.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Nombre de Empresa <span class="required">*</span></label>
+        <input type="text" name="nombre_empresa" placeholder="Ej: Innova Construcciones" required>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Personas Involucradas (Mail, Tel, Rol, Sistema) <span class="required">*</span></label>
+        <textarea name="personas_involucradas" placeholder="Ej: Juan Pérez | juan@email.com | +5491112345678 | DUEÑO" required></textarea>
+        <div class="field-helper">Listá todas las personas clave con su información de contacto, rol y sistema.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Tipo de Empresa <span class="required">*</span></label>
+        <div class="checkbox-group">
+          <div class="checkbox-option">
+            <input type="checkbox" name="tipo_empresa" id="tipo_estudio" value="Estudio de Arquitectura">
+            <label for="tipo_estudio">Estudio de Arquitectura</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="tipo_empresa" id="tipo_constructora" value="Constructora">
+            <label for="tipo_constructora">Constructora</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="tipo_empresa" id="tipo_desarrolladores" value="Desarrolladores">
+            <label for="tipo_desarrolladores">Desarrolladores</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="tipo_empresa" id="tipo_otros" value="Otros">
+            <label for="tipo_otros">Otros</label>
+          </div>
+        </div>
+        <div class="otros-input-wrapper" id="tipoOtrosWrapper">
+          <input type="text" name="tipo_empresa_otros" placeholder="Especificá cuál">
+        </div>
+        <div class="field-error">Seleccioná al menos una opción.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Donde Opera <span class="required">*</span></label>
+        <input type="text" name="donde_opera" placeholder="Ej: Zona Sur BSAS (Canning, Ezeiza, etc)" required>
+        <div class="field-helper">Zonas geográficas donde opera la empresa.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Links</label>
+        <textarea name="links" placeholder="Ej: https://landing.empresa.com"></textarea>
+        <div class="field-helper">Web, landing, redes sociales u otros links relevantes de la empresa.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 2: Plan y Servicios ====== -->
+    <div class="form-step" data-step="2">
+      <div class="step-header">
+        <h2 class="step-title">Plan y Servicios</h2>
+        <p class="step-description">Definí el plan contratado y los servicios a ejecutar para este cliente.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Plan Contratado <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="plan_contratado" id="plan_basic" value="BASIC" required>
+            <label for="plan_basic">BASIC</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="plan_contratado" id="plan_pro" value="PRO">
+            <label for="plan_pro">PRO</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="plan_contratado" id="plan_personalizado" value="PERSONALIZADO">
+            <label for="plan_personalizado">PERSONALIZADO</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Se Desarrolla la Web? <span class="required">*</span></label>
+        <textarea name="desarrollo_web" placeholder="Ej: Se desarrolla landing desde cero / Se hace web completa / Se confirma durante el desarrollo del proyecto" required></textarea>
+        <div class="field-helper">Describir en caso de desarrollar una landing o la web entera, o si se va a confirmar durante el desarrollo del proyecto.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Funnels a Ejecutar <span class="required">*</span></label>
+        <div class="checkbox-group">
+          <div class="checkbox-option">
+            <input type="checkbox" name="funnels" id="funnel_viviendas" value="VIVIENDAS UNIFAMILIARES">
+            <label for="funnel_viviendas">Viviendas Unifamiliares</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="funnels" id="funnel_comercial" value="COMERCIAL">
+            <label for="funnel_comercial">Comercial</label>
+          </div>
+          <div class="checkbox-option">
+            <input type="checkbox" name="funnels" id="funnel_piscinas" value="PISCINAS">
+            <label for="funnel_piscinas">Piscinas</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná al menos un funnel.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Plataforma a Usar <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="plataforma" id="plat_google" value="Google" required>
+            <label for="plat_google">Google</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="plataforma" id="plat_meta" value="Meta">
+            <label for="plat_meta">Meta</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="plataforma" id="plat_ambas" value="Ambas">
+            <label for="plat_ambas">Ambas</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 3: Presupuesto y Equipo ====== -->
+    <div class="form-step" data-step="3">
+      <div class="step-header">
+        <h2 class="step-title">Presupuesto y Equipo</h2>
+        <p class="step-description">Definí el presupuesto de inversión y la situación del equipo de diseño del cliente.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Presupuesto Definido <span class="required">*</span></label>
+        <div class="radio-group" style="flex-direction: column;">
+          <div class="radio-option">
+            <input type="radio" name="presupuesto" id="pres_0" value="NIVEL 0 > $300" required>
+            <label for="pres_0">NIVEL 0 &gt; $300</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="presupuesto" id="pres_1" value="NIVEL 1 > $500">
+            <label for="pres_1">NIVEL 1 &gt; $500</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="presupuesto" id="pres_2" value="NIVEL 2 > $750">
+            <label for="pres_2">NIVEL 2 &gt; $750</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="presupuesto" id="pres_3" value="NIVEL 3 > $1000">
+            <label for="pres_3">NIVEL 3 &gt; $1000</label>
+          </div>
+        </div>
+        <div class="field-helper">Luego se checkea de vuelta con los clientes, dentro de esto está incluido el costo de WhatsApp.</div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Equipo de Diseño / CM <span class="required">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="equipo_diseno" id="equipo_si" value="SI - TIENEN" required>
+            <label for="equipo_si">Sí, tienen</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="equipo_diseno" id="equipo_no" value="NO TIENEN">
+            <label for="equipo_no">No tienen</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="equipo_diseno" id="equipo_contratar" value="VAN A CONTRATAR">
+            <label for="equipo_contratar">Van a contratar</label>
+          </div>
+        </div>
+        <div class="field-error">Seleccioná una opción.</div>
+      </div>
+    </div>
+
+    <!-- ====== STEP 4: Detalles de Cierre ====== -->
+    <div class="form-step" data-step="4">
+      <div class="step-header">
+        <h2 class="step-title">Detalles de Cierre</h2>
+        <p class="step-description">Toda la información relevante del cierre para que el equipo de operaciones pueda arrancar con contexto.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Detalle de la Negociación <span class="required">*</span></label>
+        <textarea name="detalle_negociacion" placeholder="Ej: Se acordó pago mensual con débito automático. Primer mes incluye setup sin costo adicional. Se le bonifica el primer mes de WhatsApp..." required style="min-height: 130px;"></textarea>
+        <div class="field-helper">Detallá lo que se acordó con el cliente en términos de pago, condiciones, bonificaciones, etc.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Detalles de Cierre + Recomendaciones para Operaciones <span class="required">*</span></label>
+        <textarea name="detalles_cierre" placeholder="Ej: El cliente tuvo mala experiencia con agencia anterior. Hoy invierte X en META. Cierra en promedio X obras por mes. Busca escalar a X proyectos mensuales..." required style="min-height: 180px;"></textarea>
+        <div class="field-helper">Contexto completo del cierre, perfil del cliente, recomendaciones clave para que operaciones pueda hacer un buen onboarding.</div>
+        <div class="field-error">Este campo es obligatorio.</div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION BUTTONS -->
+    <div class="button-row" id="buttonRow">
+      <button type="button" class="btn btn-outline" id="btnBack" style="display: none;">Anterior</button>
+      <button type="button" class="btn btn-primary" id="btnNext">Siguiente</button>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <h2 class="success-title">Ficha Enviada</h2>
+    <p class="success-message">La ficha de cierre fue recibida correctamente. El equipo de operaciones la revisará para comenzar con el seguimiento del cliente.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+  </footer>
+
+</div>
+
+<script>
+// ========== CONFIGURATION ==========
+const WEBHOOK_URL = 'https://n8n.srv1099081.hstgr.cloud/webhook/ficha-cierre';
+const REDIRECT_URL = null;
+
+// ========== STATE ==========
+let currentStep = 1;
+const totalSteps = 4;
+
+// ========== DOM REFS ==========
+const form = document.getElementById('cierreForm');
+const steps = document.querySelectorAll('.form-step');
+const btnNext = document.getElementById('btnNext');
+const btnBack = document.getElementById('btnBack');
+const buttonRow = document.getElementById('buttonRow');
+const progressStepsContainer = document.getElementById('progressSteps');
+const trackBarFill = document.getElementById('trackBarFill');
+const successScreen = document.getElementById('successScreen');
+
+// ========== CONDITIONAL LOGIC ==========
+// Tipo empresa "Otros" → show text input
+document.getElementById('tipo_otros').addEventListener('change', function() {
+  document.getElementById('tipoOtrosWrapper').classList.toggle('visible', this.checked);
+});
+
+// ========== PROGRESS BAR ==========
+function buildProgress() {
+  progressStepsContainer.innerHTML = '';
+  const visibleSteps = getVisibleSteps();
+  visibleSteps.forEach((stepNum, index) => {
+    if (index > 0) {
+      const line = document.createElement('div');
+      line.classList.add('progress-line');
+      if (stepNum <= currentStep) line.classList.add('active');
+      progressStepsContainer.appendChild(line);
+    }
+    const dot = document.createElement('div');
+    dot.classList.add('progress-step');
+    if (stepNum === currentStep) dot.classList.add('active');
+    else if (stepNum < currentStep) dot.classList.add('completed');
+    dot.textContent = index + 1;
+    progressStepsContainer.appendChild(dot);
+  });
+
+  // Track bar
+  const currentIndex = visibleSteps.indexOf(currentStep);
+  const pct = ((currentIndex) / (visibleSteps.length - 1)) * 100;
+  trackBarFill.style.width = pct + '%';
+}
+
+function getVisibleSteps() {
+  return [1, 2, 3, 4];
+}
+
+// ========== STEP TRANSITIONS ==========
+function showStep(stepNum, direction) {
+  const currentEl = document.querySelector('.form-step.active');
+  const targetEl = document.querySelector(`.form-step[data-step="${stepNum}"]`);
+  const slideOutClass = direction === 'forward' ? 'slide-out-left' : 'slide-out-right';
+
+  if (currentEl) {
+    currentEl.classList.remove('visible');
+    currentEl.classList.add(slideOutClass);
+    setTimeout(() => {
+      currentEl.classList.remove('active', 'slide-out-left', 'slide-out-right');
+    }, 150);
+  }
+
+  setTimeout(() => {
+    targetEl.classList.add('active');
+    targetEl.style.transform = direction === 'forward' ? 'translateX(12px)' : 'translateX(-12px)';
+    targetEl.style.opacity = '0';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        targetEl.style.transform = '';
+        targetEl.style.opacity = '';
+        targetEl.classList.add('visible');
+      });
+    });
+  }, 180);
+
+  currentStep = stepNum;
+  buildProgress();
+  updateButtons();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateButtons() {
+  const visibleSteps = getVisibleSteps();
+  const isFirst = currentStep === visibleSteps[0];
+  const isLast = currentStep === visibleSteps[visibleSteps.length - 1];
+
+  btnBack.style.display = isFirst ? 'none' : 'inline-flex';
+  btnNext.textContent = isLast ? 'Enviar Ficha' : 'Siguiente';
+}
+
+// ========== VALIDATION ==========
+function validateCurrentStep() {
+  const stepEl = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+  let valid = true;
+
+  // Clear previous errors
+  stepEl.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  stepEl.querySelectorAll('.field-error.visible').forEach(el => el.classList.remove('visible'));
+
+  // Text / email / tel / url inputs with required
+  stepEl.querySelectorAll('input[type="text"][required], input[type="email"][required], input[type="tel"][required], input[type="url"][required], textarea[required]').forEach(input => {
+    if (!input.value.trim()) {
+      input.classList.add('error');
+      const err = input.closest('.field-group').querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  });
+
+  // Radio groups with required
+  const radioGroups = new Set();
+  stepEl.querySelectorAll('input[type="radio"][required]').forEach(r => radioGroups.add(r.name));
+  radioGroups.forEach(name => {
+    const checked = stepEl.querySelector(`input[name="${name}"]:checked`);
+    if (!checked) {
+      const group = stepEl.querySelector(`input[name="${name}"]`).closest('.field-group');
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  });
+
+  // Checkbox group: tipo_empresa (step 1)
+  if (currentStep === 1) {
+    const checked = stepEl.querySelectorAll('input[name="tipo_empresa"]:checked');
+    if (checked.length === 0) {
+      const group = stepEl.querySelector('input[name="tipo_empresa"]').closest('.field-group');
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  }
+
+  // Checkbox group: funnels (step 2)
+  if (currentStep === 2) {
+    const checked = stepEl.querySelectorAll('input[name="funnels"]:checked');
+    if (checked.length === 0) {
+      const group = stepEl.querySelector('input[name="funnels"]').closest('.field-group');
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  }
+
+  return valid;
+}
+
+// ========== COLLECT DATA ==========
+function collectFormData() {
+  const data = {};
+
+  // Text, email, tel, url inputs
+  form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"]').forEach(input => {
+    if (input.name && input.value.trim()) {
+      data[input.name] = input.value.trim();
+    }
+  });
+
+  // Textareas
+  form.querySelectorAll('textarea').forEach(ta => {
+    if (ta.name && ta.value.trim()) {
+      data[ta.name] = ta.value.trim();
+    }
+  });
+
+  // Radios
+  const radioNames = new Set();
+  form.querySelectorAll('input[type="radio"]').forEach(r => radioNames.add(r.name));
+  radioNames.forEach(name => {
+    const checked = form.querySelector(`input[name="${name}"]:checked`);
+    if (checked) data[name] = checked.value;
+  });
+
+  // Checkboxes: tipo_empresa
+  const tipoChecked = form.querySelectorAll('input[name="tipo_empresa"]:checked');
+  if (tipoChecked.length > 0) {
+    data['tipo_empresa'] = Array.from(tipoChecked).map(c => c.value);
+  }
+
+  // Checkboxes: funnels
+  const funnelsChecked = form.querySelectorAll('input[name="funnels"]:checked');
+  if (funnelsChecked.length > 0) {
+    data['funnels'] = Array.from(funnelsChecked).map(c => c.value);
+  }
+
+  // Add metadata
+  data['formulario'] = 'ficha_de_cierre';
+  data['fecha_envio'] = new Date().toISOString();
+
+  return data;
+}
+
+// ========== SUBMIT ==========
+async function submitForm() {
+  btnNext.disabled = true;
+  btnNext.innerHTML = '<span class="spinner"></span>Enviando...';
+
+  const data = collectFormData();
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    showSuccess();
+  } catch (err) {
+    console.error('Webhook error:', err);
+    showSuccess();
+  }
+}
+
+function showSuccess() {
+  form.style.display = 'none';
+  buttonRow.style.display = 'none';
+  document.querySelector('.progress-container').style.display = 'none';
+  successScreen.classList.add('active');
+
+  if (REDIRECT_URL) {
+    setTimeout(() => {
+      window.location.href = REDIRECT_URL;
+    }, 3000);
+  }
+}
+
+// ========== EVENT LISTENERS ==========
+btnNext.addEventListener('click', () => {
+  if (!validateCurrentStep()) return;
+
+  const visibleSteps = getVisibleSteps();
+  const currentIndex = visibleSteps.indexOf(currentStep);
+  const isLast = currentIndex === visibleSteps.length - 1;
+
+  if (isLast) {
+    submitForm();
+  } else {
+    showStep(visibleSteps[currentIndex + 1], 'forward');
+  }
+});
+
+btnBack.addEventListener('click', () => {
+  const visibleSteps = getVisibleSteps();
+  const currentIndex = visibleSteps.indexOf(currentStep);
+  if (currentIndex > 0) {
+    showStep(visibleSteps[currentIndex - 1], 'back');
+  }
+});
+
+// Clear error on input
+form.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.classList.contains('error')) {
+    el.classList.remove('error');
+    const err = el.closest('.field-group')?.querySelector('.field-error');
+    if (err) err.classList.remove('visible');
+  }
+});
+
+form.addEventListener('change', (e) => {
+  const el = e.target;
+  if (el.type === 'radio' || el.type === 'checkbox') {
+    const group = el.closest('.field-group');
+    if (group) {
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.remove('visible');
+    }
+  }
+});
+
+// ========== INIT ==========
+function init() {
+  buildProgress();
+  const firstStep = document.querySelector('.form-step[data-step="1"]');
+  firstStep.classList.add('active');
+  requestAnimationFrame(() => {
+    firstStep.classList.add('visible');
+  });
+  updateButtons();
+}
+
+init();
+</script>
+
+</body>
+</html>
