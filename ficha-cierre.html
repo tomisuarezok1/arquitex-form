@@ -1134,7 +1134,14 @@ function validateCurrentStep() {
   // Checkbox group: funnels (step 2)
   if (currentStep === 2) {
     const checked = stepEl.querySelectorAll('input[name="funnels"]:checked');
-
+    if (checked.length === 0) {
+      const group = stepEl.querySelector('input[name="funnels"]').closest('.field-group');
+      const err = group.querySelector('.field-error');
+      if (err) err.classList.add('visible');
+      valid = false;
+    }
+  }
+  
         // Personas table validation (step 1)
     if (currentStep === 1) {
       const personasRows = stepEl.querySelectorAll('#personasBody tr');
@@ -1153,13 +1160,7 @@ function validateCurrentStep() {
         valid = false;
       }
     }
-    if (checked.length === 0) {
-      const group = stepEl.querySelector('input[name="funnels"]').closest('.field-group');
-      const err = group.querySelector('.field-error');
-      if (err) err.classList.add('visible');
-      valid = false;
-    }
-  }
+
 
   return valid;
 }
@@ -1303,11 +1304,6 @@ form.addEventListener('change', (e) => {
   }
 });
 
-// ========== INIT ==========
-function init() {
-  buildProgress();
-  const firstStep = document.querySelector('.form-step[data-step="1"]');
-
       // ========== PERSONAS TABLE FUNCTIONS ==========
     function addPersonaRow() {
       const tbody = document.getElementById('personasBody');
@@ -1334,6 +1330,12 @@ function init() {
         btn.closest('tr').remove();
       }
     }
+
+  
+// ========== INIT ==========
+function init() {
+  buildProgress();
+  const firstStep = document.querySelector('.form-step[data-step="1"]');
   firstStep.classList.add('active');
   requestAnimationFrame(() => {
     firstStep.classList.add('visible');
