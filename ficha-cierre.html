@@ -629,11 +629,90 @@
       width: 100%;
     }
   }
+
+      /* ========== PERSONAS TABLE ========== */
+    .personas-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .personas-table th {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .personas-table td {
+      padding: 4px 4px;
+    }
+    .persona-input {
+      width: 100%;
+      padding: 10px 10px !important;
+      background: var(--surface-2) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-input) !important;
+      color: var(--text) !important;
+      font-size: 13px !important;
+      min-width: 0;
+    }
+    .persona-input:focus {
+      border-color: var(--border-focus) !important;
+    }
+    .persona-select {
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 8px center !important;
+      padding-right: 24px !important;
+    }
+    .btn-add-row {
+      background: var(--accent-subtle);
+      border: 1px dashed var(--accent-border);
+      border-radius: var(--radius-btn);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: all var(--transition);
+      font-family: 'Sora', sans-serif;
+    }
+    .btn-add-row:hover {
+      background: var(--accent-border);
+    }
+    .btn-remove-row {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--error);
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      line-height: 1;
+    }
+    .btn-remove-row:hover {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
 </style>
 </head>
 <body>
 
-<div class="page-wrapper">
+
+  
+  <div class="page-wrapper">
 
   <!-- HEADER -->
   <header class="header">
@@ -672,13 +751,39 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Personas Involucradas (Mail, Tel, Rol, Sistema) <span class="required">*</span></label>
-        <textarea name="personas_involucradas" placeholder="Ej: Juan Pérez | juan@email.com | +5491112345678 | DUEÑO" required></textarea>
-        <div class="field-helper">Listá todas las personas clave con su información de contacto, rol y sistema.</div>
-        <div class="field-error">Este campo es obligatorio.</div>
-      </div>
-
-      <div class="field-group">
+              <label class="field-label">Personas Involucradas <span class="required">*</span></label>
+              <div class="field-helper">Agregá las personas clave del proyecto. Los permisos se usarán para compartir la carpeta de Google Drive.</div>
+              <div id="personasTableWrapper">
+                <table class="personas-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Rol</th>
+                      <th>Permisos Drive</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="personasBody">
+                    <tr>
+                      <td><input type="text" class="persona-input" placeholder="Juan Pérez" data-field="nombre"></td>
+                      <td><input type="email" class="persona-input" placeholder="juan@email.com" data-field="email"></td>
+                      <td><input type="text" class="persona-input" placeholder="Dueño" data-field="rol"></td>
+                      <td>
+                        <select class="persona-input persona-select" data-field="permisos">
+                          <option value="editor">Editor</option>
+                          <option value="viewer">Lector</option>
+                          <option value="commenter">Comentador</option>
+                        </select>
+                      </td>
+                      <td><button type="button" class="btn-remove-row" onclick="removePersonaRow(this)" title="Eliminar">&times;</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button type="button" class="btn-add-row" id="btnAddPersona" onclick="addPersonaRow()">+ Agregar persona</button>
+              </div>
+              <div class="field-error">Agregá al menos una persona con nombre y email.</div>
+            </div>
         <label class="field-label">Tipo de Empresa <span class="required">*</span></label>
         <div class="checkbox-group">
           <div class="checkbox-option">
@@ -1029,6 +1134,25 @@ function validateCurrentStep() {
   // Checkbox group: funnels (step 2)
   if (currentStep === 2) {
     const checked = stepEl.querySelectorAll('input[name="funnels"]:checked');
+
+        // Personas table validation (step 1)
+    if (currentStep === 1) {
+      const personasRows = stepEl.querySelectorAll('#personasBody tr');
+      let hasValidPersona = false;
+      personasRows.forEach(row => {
+        const nombre = row.querySelector('[data-field="nombre"]')?.value?.trim();
+        const email = row.querySelector('[data-field="email"]')?.value?.trim();
+        if (nombre && email) hasValidPersona = true;
+      });
+      if (!hasValidPersona) {
+        const wrapper = stepEl.querySelector('#personasTableWrapper');
+        if (wrapper) {
+          const err = wrapper.closest('.field-group')?.querySelector('.field-error');
+          if (err) err.classList.add('visible');
+        }
+        valid = false;
+      }
+    }
     if (checked.length === 0) {
       const group = stepEl.querySelector('input[name="funnels"]').closest('.field-group');
       const err = group.querySelector('.field-error');
@@ -1077,6 +1201,22 @@ function collectFormData() {
   if (funnelsChecked.length > 0) {
     data['funnels'] = Array.from(funnelsChecked).map(c => c.value);
   }
+
+      // Personas involucradas (dynamic table)
+    const personasRows = document.querySelectorAll('#personasBody tr');
+    const personas = [];
+    personasRows.forEach(row => {
+      const nombre = row.querySelector('[data-field="nombre"]')?.value?.trim() || '';
+      const email = row.querySelector('[data-field="email"]')?.value?.trim() || '';
+      const rol = row.querySelector('[data-field="rol"]')?.value?.trim() || '';
+      const permisos = row.querySelector('[data-field="permisos"]')?.value || 'editor';
+      if (nombre || email) {
+        personas.push({ nombre, email, rol, permisos });
+      }
+    });
+    if (personas.length > 0) {
+      data['personas_involucradas'] = personas;
+    }
 
   // Add metadata
   data['formulario'] = 'ficha_de_cierre';
@@ -1167,6 +1307,33 @@ form.addEventListener('change', (e) => {
 function init() {
   buildProgress();
   const firstStep = document.querySelector('.form-step[data-step="1"]');
+
+      // ========== PERSONAS TABLE FUNCTIONS ==========
+    function addPersonaRow() {
+      const tbody = document.getElementById('personasBody');
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><input type="text" class="persona-input" placeholder="Nombre" data-field="nombre"></td>
+        <td><input type="email" class="persona-input" placeholder="email@ejemplo.com" data-field="email"></td>
+        <td><input type="text" class="persona-input" placeholder="Rol" data-field="rol"></td>
+        <td>
+          <select class="persona-input persona-select" data-field="permisos">
+            <option value="editor">Editor</option>
+            <option value="viewer">Lector</option>
+            <option value="commenter">Comentador</option>
+          </select>
+        </td>
+        <td><button type="button" class="btn-remove-row" onclick="removePersonaRow(this)" title="Eliminar">&times;</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    function removePersonaRow(btn) {
+      const tbody = document.getElementById('personasBody');
+      if (tbody.rows.length > 1) {
+        btn.closest('tr').remove();
+      }
+    }
   firstStep.classList.add('active');
   requestAnimationFrame(() => {
     firstStep.classList.add('visible');
