@@ -449,7 +449,7 @@
     display: flex;
     gap: 12px;
     margin-top: 40px;
-    justify-content: flex-end;
+    justify-content: center;
   }
 
   .btn {
@@ -706,7 +706,8 @@
       background: var(--error-bg);
       border-color: var(--error);
     }
-</style>
+    #cierreForm { position: relative; overflow: hidden; }
+    </style>
 </head>
 <body>
 
@@ -1053,8 +1054,8 @@ function showStep(stepNum, direction) {
   const slideOutClass = direction === 'forward' ? 'slide-out-left' : 'slide-out-right';
 
   if (currentEl) {
-    currentEl.classList.remove('visible');
-    currentEl.classList.add(slideOutClass);
+    currentEl.classList.remove('visible', 'active', 'slide-out-left', 'slide-out-right');
+    // slideOutClass removed - classes already cleared above
     setTimeout(() => {
       currentEl.classList.remove('active', 'slide-out-left', 'slide-out-right');
     }, 150);
@@ -1071,7 +1072,7 @@ function showStep(stepNum, direction) {
         targetEl.classList.add('visible');
       });
     });
-  }, 180);
+  }, 20);
 
   currentStep = stepNum;
   buildProgress();
