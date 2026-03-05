@@ -1345,6 +1345,16 @@ function init() {
 }
 
 init();
+
+      // DEBUG
+    (function(){
+      var s1=document.querySelector('.form-step[data-step="1"]');
+      var s2=document.querySelector('.form-step[data-step="2"]');
+      var d=document.createElement('div');
+      d.style.cssText='position:fixed;top:0;left:0;background:red;color:white;padding:10px;z-index:99999;font-size:11px;max-width:100vw;word-break:break-all;';
+      d.textContent='S1:'+(s1?s1.childElementCount+'kids,tag='+s1.tagName+',parent='+s1.parentElement.tagName+'#'+s1.parentElement.id:'NULL')+' | S2:'+(s2?s2.childElementCount+'kids':'NULL')+' | FormKids:'+document.getElementById('cierreForm').childElementCount;
+      document.body.appendChild(d);
+    })();
 </script>
 
 </body>
