@@ -141,6 +141,36 @@
     .footer a { color: var(--text-dim); text-decoration: none; font-size: 11px; font-weight: 400; transition: color var(--transition); }
     .footer a:hover { color: var(--text-muted); }
 
+    /* ========== TEMPLATE SELECTOR ========== */
+    .template-grid { display: flex; flex-direction: column; gap: 12px; }
+    .template-card { position: relative; }
+    .template-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .template-card label {
+      display: flex; align-items: center; gap: 14px; padding: 16px 18px;
+      border: 1px solid var(--border); border-radius: var(--radius-card);
+      cursor: pointer; transition: all var(--transition); user-select: none;
+    }
+    .template-card label::before {
+      content: ''; width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--border); transition: all var(--transition); flex-shrink: 0;
+    }
+    .template-card input[type="radio"]:checked + label {
+      border-color: var(--accent); background: var(--accent-subtle);
+    }
+    .template-card input[type="radio"]:checked + label::before {
+      border-color: var(--accent); background: var(--accent);
+      box-shadow: inset 0 0 0 3px #000;
+    }
+    .template-info { flex: 1; min-width: 0; }
+    .template-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .template-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .template-link {
+      font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none;
+      padding: 6px 14px; border: 1px solid var(--accent-border); border-radius: var(--radius-btn);
+      transition: all var(--transition); white-space: nowrap; flex-shrink: 0;
+    }
+    .template-link:hover { background: var(--accent-subtle); border-color: var(--accent); }
+
     /* ========== RESPONSIVE ========== */
     @media (max-width: 480px) {
       .page-wrapper { padding: 16px 16px 40px; }
@@ -443,8 +473,52 @@
         </div>
       </div>
 
-      <!-- ====== STEP 8: Comunicación ====== -->
+      <!-- ====== STEP 8: Plantilla Web ====== -->
       <div class="form-step" data-step="8">
+        <div class="step-header">
+          <h2 class="step-title">Plantilla Web</h2>
+          <p class="step-description">Elegí la plantilla de sitio web que más te guste para tu empresa. Podés ver cada referencia haciendo clic en "Ver sitio".</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">¿Qué plantilla preferís? <span class="required">*</span></label>
+          <div class="template-grid">
+            <div class="template-card">
+              <input type="radio" name="plantilla_web" id="plantilla_michino" value="Michino Studio" required>
+              <label for="plantilla_michino">
+                <div class="template-info">
+                  <div class="template-name">Michino Studio</div>
+                  <div class="template-desc">Diseño minimalista y elegante con animaciones suaves.</div>
+                </div>
+                <a href="https://michinostudio.com/inicio" target="_blank" rel="noopener noreferrer" class="template-link" onclick="event.stopPropagation()">Ver sitio</a>
+              </label>
+            </div>
+            <div class="template-card">
+              <input type="radio" name="plantilla_web" id="plantilla_retonio" value="Retonio" required>
+              <label for="plantilla_retonio">
+                <div class="template-info">
+                  <div class="template-name">Retonio</div>
+                  <div class="template-desc">Estilo moderno y profesional con foco en portafolio.</div>
+                </div>
+                <a href="https://retonio.com/" target="_blank" rel="noopener noreferrer" class="template-link" onclick="event.stopPropagation()">Ver sitio</a>
+              </label>
+            </div>
+            <div class="template-card">
+              <input type="radio" name="plantilla_web" id="plantilla_gcf" value="GCF Arquitectura" required>
+              <label for="plantilla_gcf">
+                <div class="template-info">
+                  <div class="template-name">GCF Arquitectura</div>
+                  <div class="template-desc">Diseño corporativo orientado a estudios de arquitectura.</div>
+                </div>
+                <a href="https://gcfarquitectura.com.ar/inicio" target="_blank" rel="noopener noreferrer" class="template-link" onclick="event.stopPropagation()">Ver sitio</a>
+              </label>
+            </div>
+          </div>
+          <div class="field-error">Seleccioná una plantilla.</div>
+        </div>
+      </div>
+
+      <!-- ====== STEP 9: Comunicación ====== -->
+      <div class="form-step" data-step="9">
         <div class="step-header">
           <h2 class="step-title">Comunicación</h2>
           <p class="step-description">Definí cómo querés recibir las notificaciones del sistema Arquitex.</p>
@@ -499,7 +573,7 @@
 
     // ========== STATE ==========
     let currentStep = 1;
-    let totalSteps = 8;
+    let totalSteps = 9;
 
     // ========== DOM REFS ==========
     const form = document.getElementById('onboardingForm');
@@ -554,7 +628,7 @@
     }
 
     function getVisibleSteps() {
-      const all = [1, 2, 3, 4, 5, 6, 7, 8];
+      const all = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       return all;
     }
 
