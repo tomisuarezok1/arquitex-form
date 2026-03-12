@@ -201,21 +201,6 @@
           <div class="field-helper">Seleccioná la opción que mejor represente tu actividad principal.</div>
           <div class="field-error">Seleccioná una opción.</div>
         </div>
-        <div class="field-group">
-          <label class="field-label">¿Está registrada? <span class="required">*</span></label>
-          <div class="radio-group">
-            <div class="radio-option">
-              <input type="radio" name="registrada" id="registrada_si" value="Sí" required>
-              <label for="registrada_si">Sí</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" name="registrada" id="registrada_no" value="No">
-              <label for="registrada_no">No</label>
-            </div>
-          </div>
-          <div class="field-helper">Indicá si tu empresa está registrada formalmente.</div>
-          <div class="field-error">Seleccioná una opción.</div>
-        </div>
       </div>
 
       <!-- ====== STEP 2: Información Fiscal ====== -->
@@ -515,7 +500,6 @@
     // ========== STATE ==========
     let currentStep = 1;
     let totalSteps = 8;
-    let skipStep2 = false;
 
     // ========== DOM REFS ==========
     const form = document.getElementById('onboardingForm');
@@ -528,10 +512,6 @@
     const successScreen = document.getElementById('successScreen');
 
     // ========== CONDITIONAL LOGIC ==========
-    document.querySelectorAll('input[name="registrada"]').forEach(radio => {
-      radio.addEventListener('change', () => { skipStep2 = radio.value === 'No'; });
-    });
-
     document.querySelectorAll('input[name="testimonios"]').forEach(radio => {
       radio.addEventListener('change', () => {
         const detail = document.getElementById('testimoniosDetail');
@@ -575,7 +555,6 @@
 
     function getVisibleSteps() {
       const all = [1, 2, 3, 4, 5, 6, 7, 8];
-      if (skipStep2) return all.filter(s => s !== 2);
       return all;
     }
 
