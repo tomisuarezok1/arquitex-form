@@ -345,6 +345,24 @@
           <input type="text" name="precio_m2" placeholder="Ej: 800 a 1900 USD por metro cuadrado" required>
           <div class="field-error">Este campo es obligatorio.</div>
         </div>
+        <div class="field-group">
+          <label class="field-label">Criterios de cualificación <span class="required">*</span></label>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="checkbox" name="criterios_cualificacion" id="crit_construccion" value="Sólo construcción desde cero">
+              <label for="crit_construccion">Sólo construcción desde cero</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" name="criterios_cualificacion" id="crit_terreno" value="Tiene terreno">
+              <label for="crit_terreno">Tiene terreno</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" name="criterios_cualificacion" id="crit_zona" value="Está en la zona específica">
+              <label for="crit_zona">Está en la zona específica</label>
+            </div>
+          </div>
+          <div class="field-error">Seleccioná al menos un criterio.</div>
+        </div>
       </div>
 
       <!-- ====== STEP 5: Prueba Social / Validación ====== -->
@@ -724,6 +742,16 @@
         }
       }
 
+      if (currentStep === 4) {
+        const checked = stepEl.querySelectorAll('input[name="criterios_cualificacion"]:checked');
+        if (checked.length === 0) {
+          const group = stepEl.querySelector('input[name="criterios_cualificacion"]').closest('.field-group');
+          const err = group.querySelector('.field-error');
+          if (err) err.classList.add('visible');
+          valid = false;
+        }
+      }
+
       return valid;
     }
 
@@ -747,6 +775,8 @@
       });
       const checked = form.querySelectorAll('input[name="especializacion"]:checked');
       if (checked.length > 0) data['especializacion'] = Array.from(checked).map(c => c.value);
+      const criterios = form.querySelectorAll('input[name="criterios_cualificacion"]:checked');
+      if (criterios.length > 0) data['criterios_cualificacion'] = Array.from(criterios).map(c => c.value);
       return data;
     }
 
