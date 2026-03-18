@@ -707,6 +707,69 @@
       border-color: var(--error);
     }
     #cierreForm { position: relative; overflow: hidden; }
+
+    /* ========== NEGOCIACION SETUP TABLE ========== */
+    .negociacion-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .negociacion-table th {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .negociacion-table td {
+      padding: 4px 4px;
+    }
+    .negociacion-input {
+      width: 100%;
+      padding: 10px 10px !important;
+      background: var(--surface-2) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-input) !important;
+      color: var(--text) !important;
+      font-size: 13px !important;
+      font-family: 'Sora', sans-serif !important;
+      min-width: 0;
+    }
+    .negociacion-input:focus {
+      border-color: var(--border-focus) !important;
+    }
+
+    /* Date input styling */
+    input[type="date"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      transition: border-color var(--transition), background var(--transition);
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="date"]:focus {
+      border-color: var(--border-focus);
+      background: var(--surface-3);
+    }
+    input[type="date"].error {
+      border-color: var(--error);
+      background: var(--error-bg);
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
     </style>
 </head>
 <body>
@@ -752,16 +815,16 @@
       </div>
 
       <div class="field-group">
-              <label class="field-label">Personas Involucradas <span class="required">*</span></label>
-              <div class="field-helper">Agregá las personas clave del proyecto. Los permisos se usarán para compartir la carpeta de Google Drive.</div>
+              <label class="field-label">Responsables del Pago y Contrato <span class="required">*</span></label>
+              <div class="field-helper">Agregá las personas responsables del pago y contrato del proyecto.</div>
               <div id="personasTableWrapper">
                 <table class="personas-table">
                   <thead>
                     <tr>
                       <th>Nombre</th>
                       <th>Email</th>
+                      <th>Teléfono</th>
                       <th>Rol</th>
-                      <th>Permisos Drive</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -769,14 +832,8 @@
                     <tr>
                       <td><input type="text" class="persona-input" placeholder="Juan Pérez" data-field="nombre"></td>
                       <td><input type="email" class="persona-input" placeholder="juan@email.com" data-field="email"></td>
+                      <td><input type="tel" class="persona-input" placeholder="+54 11 1234-5678" data-field="telefono"></td>
                       <td><input type="text" class="persona-input" placeholder="Dueño" data-field="rol"></td>
-                      <td>
-                        <select class="persona-input persona-select" data-field="permisos">
-                          <option value="editor">Editor</option>
-                          <option value="viewer">Lector</option>
-                          <option value="commenter">Comentador</option>
-                        </select>
-                      </td>
                       <td><button type="button" class="btn-remove-row" onclick="removePersonaRow(this)" title="Eliminar">&times;</button></td>
                     </tr>
                   </tbody>
@@ -852,13 +909,6 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Se Desarrolla la Web? <span class="required">*</span></label>
-        <textarea name="desarrollo_web" placeholder="Ej: Se desarrolla landing desde cero / Se hace web completa / Se confirma durante el desarrollo del proyecto" required></textarea>
-        <div class="field-helper">Describir en caso de desarrollar una landing o la web entera, o si se va a confirmar durante el desarrollo del proyecto.</div>
-        <div class="field-error">Este campo es obligatorio.</div>
-      </div>
-
-      <div class="field-group">
         <label class="field-label">Funnels a Ejecutar <span class="required">*</span></label>
         <div class="">
           <div class="checkbox-option">
@@ -869,32 +919,10 @@
             <input type="checkbox" name="funnels" id="funnel_comercial" value="COMERCIAL">
             <label for="funnel_comercial">Comercial</label>
           </div>
-          <div class="checkbox-option">
-            <input type="checkbox" name="funnels" id="funnel_piscinas" value="PISCINAS">
-            <label for="funnel_piscinas">Piscinas</label>
-          </div>
         </div>
         <div class="field-error">Seleccioná al menos un funnel.</div>
       </div>
 
-      <div class="field-group">
-        <label class="field-label">Plataforma a Usar <span class="required">*</span></label>
-        <div class="radio-group">
-          <div class="radio-option">
-            <input type="radio" name="plataforma" id="plat_google" value="Google" required>
-            <label for="plat_google">Google</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" name="plataforma" id="plat_meta" value="Meta">
-            <label for="plat_meta">Meta</label>
-          </div>
-          <div class="radio-option">
-            <input type="radio" name="plataforma" id="plat_ambas" value="Ambas">
-            <label for="plat_ambas">Ambas</label>
-          </div>
-        </div>
-        <div class="field-error">Seleccioná una opción.</div>
-      </div>
     </div>
 
     <!-- ====== STEP 3: Presupuesto y Equipo ====== -->
@@ -905,7 +933,7 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Presupuesto Definido <span class="required">*</span></label>
+        <label class="field-label">Presupuesto Extra <span class="required">*</span></label>
         <div class="radio-group" style="flex-direction: column;">
           <div class="radio-option">
             <input type="radio" name="presupuesto" id="pres_0" value="NIVEL 0 > $300" required>
@@ -930,18 +958,18 @@
 
       <div class="field-group">
         <label class="field-label">Equipo de Diseño / CM <span class="required">*</span></label>
-        <div class="radio-group">
+        <div class="radio-group" style="flex-direction: column;">
           <div class="radio-option">
-            <input type="radio" name="equipo_diseno" id="equipo_si" value="SI - TIENEN" required>
-            <label for="equipo_si">Sí, tienen</label>
+            <input type="radio" name="equipo_diseno" id="equipo_tiene" value="Tiene" required>
+            <label for="equipo_tiene">Tiene</label>
           </div>
           <div class="radio-option">
-            <input type="radio" name="equipo_diseno" id="equipo_no" value="NO TIENEN">
-            <label for="equipo_no">No tienen</label>
+            <input type="radio" name="equipo_diseno" id="equipo_no_pero_contratar" value="No tiene pero va a contratar">
+            <label for="equipo_no_pero_contratar">No tiene pero va a contratar</label>
           </div>
           <div class="radio-option">
-            <input type="radio" name="equipo_diseno" id="equipo_contratar" value="VAN A CONTRATAR">
-            <label for="equipo_contratar">Van a contratar</label>
+            <input type="radio" name="equipo_diseno" id="equipo_no_ni_contratar" value="No tiene y no quiere contratar">
+            <label for="equipo_no_ni_contratar">No tiene y no quiere contratar</label>
           </div>
         </div>
         <div class="field-error">Seleccioná una opción.</div>
@@ -956,9 +984,34 @@
       </div>
 
       <div class="field-group">
-        <label class="field-label">Detalle de la Negociación <span class="required">*</span></label>
-        <textarea name="detalle_negociacion" placeholder="Ej: Se acordó pago mensual con débito automático. Primer mes incluye setup sin costo adicional. Se le bonifica el primer mes de WhatsApp..." required style="min-height: 130px;"></textarea>
-        <div class="field-helper">Detallá lo que se acordó con el cliente en términos de pago, condiciones, bonificaciones, etc.</div>
+        <label class="field-label">Negociación Setup <span class="required">*</span></label>
+        <div class="field-helper">Definí las cuotas del setup (máximo 3). Cada cuota tiene un monto y una fecha de cobro.</div>
+        <div id="negociacionTableWrapper">
+          <table class="negociacion-table">
+            <thead>
+              <tr>
+                <th>Monto (USD)</th>
+                <th>Fecha</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="negociacionBody">
+              <tr>
+                <td><input type="text" class="negociacion-input" placeholder="$ 500" data-field="monto"></td>
+                <td><input type="date" class="negociacion-input" data-field="fecha"></td>
+                <td><button type="button" class="btn-remove-row" onclick="removeNegociacionRow(this)" title="Eliminar">&times;</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn-add-row" id="btnAddNegociacion" onclick="addNegociacionRow()">+ Agregar cuota</button>
+        </div>
+        <div class="field-error">Agregá al menos una cuota con monto y fecha.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Fecha de Inicio de Mensualidad <span class="required">*</span></label>
+        <input type="date" name="fecha_inicio_mensualidad" required>
+        <div class="field-helper">Fecha en la que arranca el cobro recurrente mensual.</div>
         <div class="field-error">Este campo es obligatorio.</div>
       </div>
 
@@ -1099,8 +1152,8 @@ function validateCurrentStep() {
   stepEl.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
   stepEl.querySelectorAll('.field-error.visible').forEach(el => el.classList.remove('visible'));
 
-  // Text / email / tel / url inputs with required
-  stepEl.querySelectorAll('input[type="text"][required], input[type="email"][required], input[type="tel"][required], input[type="url"][required], textarea[required]').forEach(input => {
+  // Text / email / tel / url / date inputs with required
+  stepEl.querySelectorAll('input[type="text"][required], input[type="email"][required], input[type="tel"][required], input[type="url"][required], input[type="date"][required], textarea[required]').forEach(input => {
     if (!input.value.trim()) {
       input.classList.add('error');
       const err = input.closest('.field-group').querySelector('.field-error');
@@ -1144,6 +1197,25 @@ function validateCurrentStep() {
     }
   }
   
+    // Negociacion Setup table validation (step 4)
+    if (currentStep === 4) {
+      const negociacionRows = stepEl.querySelectorAll('#negociacionBody tr');
+      let hasValidCuota = false;
+      negociacionRows.forEach(row => {
+        const monto = row.querySelector('[data-field="monto"]')?.value?.trim();
+        const fecha = row.querySelector('[data-field="fecha"]')?.value;
+        if (monto && fecha) hasValidCuota = true;
+      });
+      if (!hasValidCuota) {
+        const wrapper = stepEl.querySelector('#negociacionTableWrapper');
+        if (wrapper) {
+          const err = wrapper.closest('.field-group')?.querySelector('.field-error');
+          if (err) err.classList.add('visible');
+        }
+        valid = false;
+      }
+    }
+
         // Personas table validation (step 1)
     if (currentStep === 1) {
       const personasRows = stepEl.querySelectorAll('#personasBody tr');
@@ -1205,21 +1277,52 @@ function collectFormData() {
     data['funnels'] = Array.from(funnelsChecked).map(c => c.value);
   }
 
-      // Personas involucradas (dynamic table)
+      // Responsables del pago y contrato (dynamic table)
     const personasRows = document.querySelectorAll('#personasBody tr');
-    const personas = [];
+    const responsables = [];
     personasRows.forEach(row => {
       const nombre = row.querySelector('[data-field="nombre"]')?.value?.trim() || '';
       const email = row.querySelector('[data-field="email"]')?.value?.trim() || '';
+      const telefono = row.querySelector('[data-field="telefono"]')?.value?.trim() || '';
       const rol = row.querySelector('[data-field="rol"]')?.value?.trim() || '';
-      const permisos = row.querySelector('[data-field="permisos"]')?.value || 'editor';
       if (nombre || email) {
-        personas.push({ nombre, email, rol, permisos });
+        responsables.push({ nombre, email, telefono, rol });
       }
     });
-    if (personas.length > 0) {
-      data['personas_involucradas'] = personas;
+    if (responsables.length > 0) {
+      data['responsables_pago_contrato'] = responsables;
     }
+
+    // Negociación Setup (dynamic table)
+    const negociacionRows = document.querySelectorAll('#negociacionBody tr');
+    const negociacionSetup = [];
+    negociacionRows.forEach(row => {
+      const monto = row.querySelector('[data-field="monto"]')?.value?.trim() || '';
+      const fecha = row.querySelector('[data-field="fecha"]')?.value || '';
+      if (monto || fecha) {
+        negociacionSetup.push({ monto, fecha });
+      }
+    });
+    if (negociacionSetup.length > 0) {
+      data['negociacion_setup'] = negociacionSetup;
+    }
+
+    // Fecha de inicio de mensualidad
+    const fechaInicio = form.querySelector('input[name="fecha_inicio_mensualidad"]');
+    if (fechaInicio && fechaInicio.value) {
+      data['fecha_inicio_mensualidad'] = fechaInicio.value;
+    }
+
+  // Rename presupuesto → presupuesto_extra
+  if (data['presupuesto']) {
+    data['presupuesto_extra'] = data['presupuesto'];
+    delete data['presupuesto'];
+  }
+
+  // Remove deleted fields that might still exist
+  delete data['desarrollo_web'];
+  delete data['plataforma'];
+  delete data['detalle_negociacion'];
 
   // Add metadata
   data['formulario'] = 'ficha_de_cierre';
@@ -1313,14 +1416,8 @@ form.addEventListener('change', (e) => {
       row.innerHTML = `
         <td><input type="text" class="persona-input" placeholder="Nombre" data-field="nombre"></td>
         <td><input type="email" class="persona-input" placeholder="email@ejemplo.com" data-field="email"></td>
+        <td><input type="tel" class="persona-input" placeholder="+54 11 1234-5678" data-field="telefono"></td>
         <td><input type="text" class="persona-input" placeholder="Rol" data-field="rol"></td>
-        <td>
-          <select class="persona-input persona-select" data-field="permisos">
-            <option value="editor">Editor</option>
-            <option value="viewer">Lector</option>
-            <option value="commenter">Comentador</option>
-          </select>
-        </td>
         <td><button type="button" class="btn-remove-row" onclick="removePersonaRow(this)" title="Eliminar">&times;</button></td>
       `;
       tbody.appendChild(row);
@@ -1330,6 +1427,38 @@ form.addEventListener('change', (e) => {
       const tbody = document.getElementById('personasBody');
       if (tbody.rows.length > 1) {
         btn.closest('tr').remove();
+      }
+    }
+
+    // ========== NEGOCIACION SETUP TABLE FUNCTIONS ==========
+    function addNegociacionRow() {
+      const tbody = document.getElementById('negociacionBody');
+      if (tbody.rows.length >= 3) return;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td><input type="text" class="negociacion-input" placeholder="$ 500" data-field="monto"></td>
+        <td><input type="date" class="negociacion-input" data-field="fecha"></td>
+        <td><button type="button" class="btn-remove-row" onclick="removeNegociacionRow(this)" title="Eliminar">&times;</button></td>
+      `;
+      tbody.appendChild(row);
+      updateNegociacionAddButton();
+    }
+
+    function removeNegociacionRow(btn) {
+      const tbody = document.getElementById('negociacionBody');
+      if (tbody.rows.length > 1) {
+        btn.closest('tr').remove();
+        updateNegociacionAddButton();
+      }
+    }
+
+    function updateNegociacionAddButton() {
+      const tbody = document.getElementById('negociacionBody');
+      const addBtn = document.getElementById('btnAddNegociacion');
+      if (tbody.rows.length >= 3) {
+        addBtn.style.display = 'none';
+      } else {
+        addBtn.style.display = 'block';
       }
     }
 
