@@ -203,26 +203,6 @@
     .involucrado-input:focus {
       border-color: var(--border-focus) !important;
     }
-    .involucrado-select {
-      width: 100%;
-      padding: 10px 10px !important;
-      background: var(--surface-2) !important;
-      border: 1px solid var(--border) !important;
-      border-radius: var(--radius-input) !important;
-      color: var(--text) !important;
-      font-size: 13px !important;
-      min-width: 0;
-      cursor: pointer;
-      -webkit-appearance: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
-      background-repeat: no-repeat !important;
-      background-position: right 8px center !important;
-      padding-right: 24px !important;
-    }
-    .involucrado-select:focus {
-      border-color: var(--border-focus) !important;
-    }
     .btn-add-row {
       background: var(--accent-subtle);
       border: 1px dashed var(--accent-border);
@@ -274,7 +254,7 @@
       .involucrados-table { font-size: 12px; }
       .involucrados-table th { font-size: 10px; padding: 6px 3px; }
       .involucrados-table td { padding: 3px 2px; }
-      .involucrado-input, .involucrado-select { font-size: 12px !important; padding: 8px 6px !important; }
+      .involucrado-input { font-size: 12px !important; padding: 8px 6px !important; }
     }
   </style>
 </head>
@@ -313,7 +293,7 @@
         </div>
         <div class="field-group">
           <label class="field-label">Involucrados <span class="required">*</span></label>
-          <div class="field-helper">Agregá las personas involucradas en el proyecto, con sus datos de contacto y rol.</div>
+          <div class="field-helper">Agregá las personas involucradas en el proyecto, con sus datos de contacto.</div>
           <div id="involucradosTableWrapper">
             <table class="involucrados-table">
               <thead>
@@ -321,7 +301,6 @@
                   <th>Nombre</th>
                   <th>Email</th>
                   <th>Teléfono</th>
-                  <th>Rol</th>
                   <th></th>
                 </tr>
               </thead>
@@ -330,13 +309,6 @@
                   <td><input type="text" class="involucrado-input" placeholder="Juan Pérez" data-field="nombre"></td>
                   <td><input type="email" class="involucrado-input" placeholder="juan@email.com" data-field="email"></td>
                   <td><input type="tel" class="involucrado-input" placeholder="+54 11 1234-5678" data-field="telefono"></td>
-                  <td>
-                    <select class="involucrado-select" data-field="rol">
-                      <option value="" disabled selected>Seleccionar</option>
-                      <option value="Vendedor">Vendedor</option>
-                      <option value="No vendedor">No vendedor</option>
-                    </select>
-                  </td>
                   <td><button type="button" class="btn-remove-row" onclick="removeInvolucradoRow(this)" title="Eliminar">&times;</button></td>
                 </tr>
               </tbody>
@@ -738,13 +710,6 @@
         <td><input type="text" class="involucrado-input" placeholder="Juan Pérez" data-field="nombre"></td>
         <td><input type="email" class="involucrado-input" placeholder="juan@email.com" data-field="email"></td>
         <td><input type="tel" class="involucrado-input" placeholder="+54 11 1234-5678" data-field="telefono"></td>
-        <td>
-          <select class="involucrado-select" data-field="rol">
-            <option value="" disabled selected>Seleccionar</option>
-            <option value="Vendedor">Vendedor</option>
-            <option value="No vendedor">No vendedor</option>
-          </select>
-        </td>
         <td><button type="button" class="btn-remove-row" onclick="removeInvolucradoRow(this)" title="Eliminar">&times;</button></td>
       `;
       tbody.appendChild(tr);
@@ -923,9 +888,8 @@
         const nombre = row.querySelector('[data-field="nombre"]').value.trim();
         const email = row.querySelector('[data-field="email"]').value.trim();
         const telefono = row.querySelector('[data-field="telefono"]').value.trim();
-        const rol = row.querySelector('[data-field="rol"]').value;
         if (nombre || email) {
-          involucrados.push({ nombre, email, telefono, rol });
+          involucrados.push({ nombre, email, telefono });
         }
       });
       if (involucrados.length > 0) data['involucrados'] = involucrados;
