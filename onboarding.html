@@ -171,6 +171,94 @@
     }
     .template-link:hover { background: var(--accent-subtle); border-color: var(--accent); }
 
+    /* ========== INVOLUCRADOS TABLE ========== */
+    .involucrados-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .involucrados-table th {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .involucrados-table td {
+      padding: 4px 4px;
+    }
+    .involucrado-input {
+      width: 100%;
+      padding: 10px 10px !important;
+      background: var(--surface-2) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-input) !important;
+      color: var(--text) !important;
+      font-size: 13px !important;
+      min-width: 0;
+    }
+    .involucrado-input:focus {
+      border-color: var(--border-focus) !important;
+    }
+    .involucrado-select {
+      width: 100%;
+      padding: 10px 10px !important;
+      background: var(--surface-2) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-input) !important;
+      color: var(--text) !important;
+      font-size: 13px !important;
+      min-width: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 8px center !important;
+      padding-right: 24px !important;
+    }
+    .involucrado-select:focus {
+      border-color: var(--border-focus) !important;
+    }
+    .btn-add-row {
+      background: var(--accent-subtle);
+      border: 1px dashed var(--accent-border);
+      border-radius: var(--radius-btn);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: all var(--transition);
+      font-family: 'Sora', sans-serif;
+    }
+    .btn-add-row:hover {
+      background: var(--accent-border);
+    }
+    .btn-remove-row {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--error);
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      line-height: 1;
+    }
+    .btn-remove-row:hover {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+
     /* ========== RESPONSIVE ========== */
     @media (max-width: 480px) {
       .page-wrapper { padding: 16px 16px 40px; }
@@ -183,6 +271,10 @@
       .btn { width: 100%; }
       .radio-group { flex-direction: column; }
       .radio-option label { width: 100%; }
+      .involucrados-table { font-size: 12px; }
+      .involucrados-table th { font-size: 10px; padding: 6px 3px; }
+      .involucrados-table td { padding: 3px 2px; }
+      .involucrado-input, .involucrado-select { font-size: 12px !important; padding: 8px 6px !important; }
     }
   </style>
 </head>
@@ -219,6 +311,41 @@
           <input type="text" name="nombre_empresa" placeholder="Ej: Constructora Del Valle" required>
           <div class="field-error">Este campo es obligatorio.</div>
         </div>
+        <div class="field-group">
+          <label class="field-label">Involucrados <span class="required">*</span></label>
+          <div class="field-helper">Agregá las personas involucradas en el proyecto, con sus datos de contacto y rol.</div>
+          <div id="involucradosTableWrapper">
+            <table class="involucrados-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Teléfono</th>
+                  <th>Rol</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="involucradosBody">
+                <tr>
+                  <td><input type="text" class="involucrado-input" placeholder="Juan Pérez" data-field="nombre"></td>
+                  <td><input type="email" class="involucrado-input" placeholder="juan@email.com" data-field="email"></td>
+                  <td><input type="tel" class="involucrado-input" placeholder="+54 11 1234-5678" data-field="telefono"></td>
+                  <td>
+                    <select class="involucrado-select" data-field="rol">
+                      <option value="" disabled selected>Seleccionar</option>
+                      <option value="Vendedor">Vendedor</option>
+                      <option value="No vendedor">No vendedor</option>
+                    </select>
+                  </td>
+                  <td><button type="button" class="btn-remove-row" onclick="removeInvolucradoRow(this)" title="Eliminar">&times;</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="button" class="btn-add-row" onclick="addInvolucradoRow()">+ Agregar persona</button>
+          </div>
+          <div class="field-error">Agregá al menos una persona con nombre y email.</div>
+        </div>
+
         <div class="field-group">
           <label class="field-label">¿Cómo describirías a tu empresa? <span class="required">*</span></label>
           <select name="tipo_empresa" required>
@@ -462,20 +589,6 @@
           <p class="step-description">Tu presencia digital actual. Esto nos ayuda a entender tu ecosistema online.</p>
         </div>
         <div class="field-group">
-          <label class="field-label">¿Tu empresa posee una cuenta de WhatsApp Business? <span class="required">*</span></label>
-          <div class="radio-group">
-            <div class="radio-option">
-              <input type="radio" name="whatsapp_business" id="wab_si" value="Sí" required>
-              <label for="wab_si">Sí</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" name="whatsapp_business" id="wab_no" value="No">
-              <label for="wab_no">No</label>
-            </div>
-          </div>
-          <div class="field-error">Seleccioná una opción.</div>
-        </div>
-        <div class="field-group">
           <label class="field-label">Tu página de Facebook</label>
           <input type="url" name="facebook" placeholder="https://facebook.com/tu-pagina">
           <div class="field-helper">Dejá en blanco si no tenés página de Facebook.</div>
@@ -483,10 +596,6 @@
         <div class="field-group">
           <label class="field-label">Tu página de Instagram</label>
           <input type="url" name="instagram" placeholder="https://instagram.com/tu-cuenta">
-        </div>
-        <div class="field-group">
-          <label class="field-label">Tu página de LinkedIn</label>
-          <input type="url" name="linkedin" placeholder="https://linkedin.com/company/tu-empresa">
         </div>
       </div>
 
@@ -621,6 +730,33 @@
       document.getElementById('otrosWrapper').classList.toggle('visible', this.checked);
     });
 
+    // ========== INVOLUCRADOS TABLE ==========
+    function addInvolucradoRow() {
+      const tbody = document.getElementById('involucradosBody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="involucrado-input" placeholder="Juan Pérez" data-field="nombre"></td>
+        <td><input type="email" class="involucrado-input" placeholder="juan@email.com" data-field="email"></td>
+        <td><input type="tel" class="involucrado-input" placeholder="+54 11 1234-5678" data-field="telefono"></td>
+        <td>
+          <select class="involucrado-select" data-field="rol">
+            <option value="" disabled selected>Seleccionar</option>
+            <option value="Vendedor">Vendedor</option>
+            <option value="No vendedor">No vendedor</option>
+          </select>
+        </td>
+        <td><button type="button" class="btn-remove-row" onclick="removeInvolucradoRow(this)" title="Eliminar">&times;</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function removeInvolucradoRow(btn) {
+      const tbody = document.getElementById('involucradosBody');
+      if (tbody.rows.length > 1) {
+        btn.closest('tr').remove();
+      }
+    }
+
     // ========== PROGRESS BAR ==========
     function buildProgress() {
       progressStepsContainer.innerHTML = '';
@@ -731,6 +867,23 @@
         }
       });
 
+      // Validate involucrados table in step 1
+      if (currentStep === 1) {
+        const rows = document.querySelectorAll('#involucradosBody tr');
+        let hasValidRow = false;
+        rows.forEach(row => {
+          const nombre = row.querySelector('[data-field="nombre"]').value.trim();
+          const email = row.querySelector('[data-field="email"]').value.trim();
+          if (nombre && email) hasValidRow = true;
+        });
+        if (!hasValidRow) {
+          const wrapper = document.getElementById('involucradosTableWrapper');
+          const err = wrapper.closest('.field-group').querySelector('.field-error');
+          if (err) err.classList.add('visible');
+          valid = false;
+        }
+      }
+
       if (currentStep === 3) {
         const checked = stepEl.querySelectorAll('input[name="especializacion"]:checked');
         if (checked.length === 0) {
@@ -763,6 +916,20 @@
         const checked = form.querySelector(`input[name="${name}"]:checked`);
         if (checked) data[name] = checked.value;
       });
+      // Collect involucrados
+      const involucradosRows = document.querySelectorAll('#involucradosBody tr');
+      const involucrados = [];
+      involucradosRows.forEach(row => {
+        const nombre = row.querySelector('[data-field="nombre"]').value.trim();
+        const email = row.querySelector('[data-field="email"]').value.trim();
+        const telefono = row.querySelector('[data-field="telefono"]').value.trim();
+        const rol = row.querySelector('[data-field="rol"]').value;
+        if (nombre || email) {
+          involucrados.push({ nombre, email, telefono, rol });
+        }
+      });
+      if (involucrados.length > 0) data['involucrados'] = involucrados;
+
       const checked = form.querySelectorAll('input[name="especializacion"]:checked');
       if (checked.length > 0) data['especializacion'] = Array.from(checked).map(c => c.value);
       const criterios = form.querySelectorAll('input[name="criterios_cualificacion"]:checked');
@@ -829,6 +996,12 @@
           if (err) err.classList.remove('visible');
         }
       }
+    });
+
+    // Clear involucrados error on input
+    document.getElementById('involucradosTableWrapper').addEventListener('input', () => {
+      const err = document.getElementById('involucradosTableWrapper').closest('.field-group').querySelector('.field-error');
+      if (err) err.classList.remove('visible');
     });
 
     // ========== INIT ==========
