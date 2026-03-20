@@ -773,21 +773,21 @@
     function buildProgress() {
       progressStepsContainer.innerHTML = '';
       const visibleSteps = getVisibleSteps();
+      const currentIndex = visibleSteps.indexOf(currentStep);
       visibleSteps.forEach((stepNum, index) => {
         if (index > 0) {
           const line = document.createElement('div');
           line.classList.add('progress-line');
-          if (stepNum <= currentStep) line.classList.add('active');
+          if (index <= currentIndex) line.classList.add('active');
           progressStepsContainer.appendChild(line);
         }
         const dot = document.createElement('div');
         dot.classList.add('progress-step');
-        if (stepNum === currentStep) dot.classList.add('active');
-        else if (stepNum < currentStep) dot.classList.add('completed');
+        if (index === currentIndex) dot.classList.add('active');
+        else if (index < currentIndex) dot.classList.add('completed');
         dot.textContent = index + 1;
         progressStepsContainer.appendChild(dot);
       });
-      const currentIndex = visibleSteps.indexOf(currentStep);
       const pct = ((currentIndex) / (visibleSteps.length - 1)) * 100;
       trackBarFill.style.width = pct + '%';
     }
