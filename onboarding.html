@@ -324,7 +324,6 @@
             <option value="" disabled selected>Seleccioná una opción</option>
             <option value="Estudio de Arquitectura">Estudio de Arquitectura</option>
             <option value="Constructora">Constructora</option>
-            <option value="Desarrolladora">Desarrolladora</option>
             <option value="Combinación">Combinación</option>
           </select>
           <div class="field-helper">Seleccioná la opción que mejor represente tu actividad principal.</div>
@@ -358,6 +357,7 @@
         </div>
         <div class="field-group">
           <label class="field-label">¿Qué especialización tienen? <span class="required">*</span></label>
+          <div class="field-helper">Esto determina qué funnels se levantan en el proceso.</div>
           <div class="checkbox-group">
             <div class="checkbox-option">
               <input type="checkbox" name="especializacion" id="esp_residencial" value="Arquitectura residencial">
@@ -366,10 +366,6 @@
             <div class="checkbox-option">
               <input type="checkbox" name="especializacion" id="esp_comercial" value="Arquitectura comercial">
               <label for="esp_comercial">Arquitectura comercial</label>
-            </div>
-            <div class="checkbox-option">
-              <input type="checkbox" name="especializacion" id="esp_remodelaciones" value="Remodelaciones">
-              <label for="esp_remodelaciones">Remodelaciones</label>
             </div>
             <div class="checkbox-option">
               <input type="checkbox" name="especializacion" id="esp_otros" value="Otros">
@@ -460,6 +456,44 @@
               <label for="crit_zona">Está en la zona específica</label>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ====== STEP 10: Valores Comerciales (condicional) ====== -->
+      <div class="form-step" data-step="10">
+        <div class="step-header">
+          <h2 class="step-title">Valores Comerciales</h2>
+          <p class="step-description">Completá la información comercial relacionada con arquitectura comercial.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Alcance Geográfico – Comercial <span class="required">*</span></label>
+          <input type="text" name="alcance_geografico_comercial" placeholder="Ej: CABA, Gran Buenos Aires, Córdoba Capital">
+          <div class="field-error">Este campo es obligatorio.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Especialización – Comercial <span class="required">*</span></label>
+          <input type="text" name="especializacion_comercial" placeholder="Ej: Locales comerciales, oficinas corporativas, showrooms">
+          <div class="field-error">Este campo es obligatorio.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Precio Máximo de M2 – Comercial <span class="required">*</span></label>
+          <input type="text" name="precio_maximo_m2_comercial" placeholder="Ej: 2500 USD">
+          <div class="field-error">Este campo es obligatorio.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Precio Mínimo de M2 – Comercial <span class="required">*</span></label>
+          <input type="text" name="precio_minimo_m2_comercial" placeholder="Ej: 800 USD">
+          <div class="field-error">Este campo es obligatorio.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Propuesta de Valor – Comercial <span class="required">*</span></label>
+          <textarea name="propuesta_valor_comercial" placeholder="Describí tu propuesta de valor para proyectos comerciales..."></textarea>
+          <div class="field-error">Este campo es obligatorio.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Tiempo de Entrega – Comercial <span class="required">*</span></label>
+          <input type="text" name="tiempo_entrega_comercial" placeholder="Ej: 30 días hábiles">
+          <div class="field-error">Este campo es obligatorio.</div>
         </div>
       </div>
 
@@ -591,13 +625,13 @@
               </label>
             </div>
             <div class="template-card">
-              <input type="radio" name="plantilla_web" id="plantilla_retonio" value="Retonio" required>
-              <label for="plantilla_retonio">
+              <input type="radio" name="plantilla_web" id="plantilla_atr" value="ATR Arquitectos" required>
+              <label for="plantilla_atr">
                 <div class="template-info">
-                  <div class="template-name">Retonio</div>
+                  <div class="template-name">ATR Arquitectos</div>
                   <div class="template-desc">Estilo moderno y profesional con foco en portafolio.</div>
                 </div>
-                <a href="https://retonio.com/" target="_blank" rel="noopener noreferrer" class="template-link" onclick="event.stopPropagation()">Ver sitio</a>
+                <a href="https://atr-arquitectos.com/template1" target="_blank" rel="noopener noreferrer" class="template-link" onclick="event.stopPropagation()">Ver sitio</a>
               </label>
             </div>
             <div class="template-card">
@@ -671,7 +705,7 @@
 
     // ========== STATE ==========
     let currentStep = 1;
-    let totalSteps = 9;
+    let totalSteps = 10;
 
     // ========== DOM REFS ==========
     const form = document.getElementById('onboardingForm');
@@ -700,6 +734,19 @@
 
     document.getElementById('esp_otros').addEventListener('change', function() {
       document.getElementById('otrosWrapper').classList.toggle('visible', this.checked);
+    });
+
+    document.getElementById('esp_comercial').addEventListener('change', function() {
+      const step10 = document.querySelector('.form-step[data-step="10"]');
+      step10.querySelectorAll('input[type="text"], textarea').forEach(el => {
+        if (this.checked) {
+          el.setAttribute('required', '');
+        } else {
+          el.removeAttribute('required');
+        }
+      });
+      buildProgress();
+      updateButtons();
     });
 
     // ========== INVOLUCRADOS TABLE ==========
@@ -746,7 +793,10 @@
     }
 
     function getVisibleSteps() {
-      const all = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const comercialChecked = document.getElementById('esp_comercial')?.checked;
+      const all = [1, 2, 3, 4];
+      if (comercialChecked) all.push(10);
+      all.push(5, 6, 7, 8, 9);
       return all;
     }
 
