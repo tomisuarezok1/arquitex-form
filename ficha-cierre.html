@@ -1265,6 +1265,12 @@ function collectFormData() {
     if (checked) data[name] = checked.value;
   });
 
+  // Monto mensualidad según plan contratado
+  const planMontos = { 'BASIC': 300, 'PRO': 500 };
+  if (data['plan_contratado'] && planMontos[data['plan_contratado']]) {
+    data['monto_mensualidad'] = planMontos[data['plan_contratado']];
+  }
+
   // Checkboxes: tipo_empresa
   const tipoChecked = form.querySelectorAll('input[name="tipo_empresa"]:checked');
   if (tipoChecked.length > 0) {
