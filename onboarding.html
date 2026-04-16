@@ -957,15 +957,25 @@
       btnNext.innerHTML = '<span class="spinner"></span>Enviando...';
       const data = collectFormData();
       try {
-        await fetch(WEBHOOK_URL, {
+        const res = await fetch(WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         showSuccess();
       } catch (err) {
         console.error('Webhook error:', err);
-        showSuccess();
+        btnNext.disabled = false;
+        btnNext.textContent = 'Reintentar envío';
+        const errMsg = document.createElement('div');
+        errMsg.className = 'field-error visible';
+        errMsg.style.cssText = 'text-align:center;margin-top:12px;';
+        errMsg.textContent = 'Error al enviar. Verificá tu conexión e intentá de nuevo.';
+        if (!document.getElementById('submitError')) {
+          errMsg.id = 'submitError';
+          btnNext.parentElement.appendChild(errMsg);
+        }
       }
     }
 
