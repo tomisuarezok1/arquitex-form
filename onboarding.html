@@ -702,6 +702,106 @@
     // ========== CONFIGURATION ==========
     const WEBHOOK_URL = 'https://n8n.srv1099081.hstgr.cloud/webhook/onboarding-arquitex';
     const REDIRECT_URL = null;
+    const SUPABASE_URL = 'https://dvnwkdtrksuxywfzzoki.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2bndrZHRya3N1eHl3Znp6b2tpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MzExNTgsImV4cCI6MjA4ODMwNzE1OH0.NBLGEr0BQwjaEd2P2zdQutS2Q6zBYIl9KdhCAoVxHXk';
+    const LS_KEY = 'arquitex_onboarding_draft';
+
+    // ========== LOCAL STORAGE ==========
+    function saveDraft() {
+      try {
+        const data = collectFormData();
+        data._step = currentStep;
+        localStorage.setItem(LS_KEY, JSON.stringify(data));
+      } catch (e) { /* silently fail */ }
+    }
+
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) { return null; }
+    }
+
+    function clearDraft() {
+      localStorage.removeItem(LS_KEY);
+    }
+
+    function restoreDraft() {
+      const draft = loadDraft();
+      if (!draft) return;
+      // Restore text/email/tel/url inputs
+      form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"]').forEach(input => {
+        if (input.name && draft[input.name]) input.value = draft[input.name];
+      });
+      // Restore textareas
+      form.querySelectorAll('textarea').forEach(ta => {
+        if (ta.name && draft[ta.name]) ta.value = draft[ta.name];
+      });
+      // Restore selects
+      form.querySelectorAll('select').forEach(sel => {
+        if (sel.name && draft[sel.name]) sel.value = draft[sel.name];
+      });
+      // Restore radios
+      form.querySelectorAll('input[type="radio"]').forEach(r => {
+        if (draft[r.name] && r.value === draft[r.name]) r.checked = true;
+      });
+      // Restore checkboxes (especializacion, criterios)
+      if (Array.isArray(draft['especializacion'])) {
+        draft['especializacion'].forEach(v => {
+          const cb = form.querySelector(`input[name="especializacion"][value="${v}"]`);
+          if (cb) cb.checked = true;
+        });
+      }
+      if (Array.isArray(draft['criterios_cualificacion'])) {
+        draft['criterios_cualificacion'].forEach(v => {
+          const cb = form.querySelector(`input[name="criterios_cualificacion"][value="${v}"]`);
+          if (cb) cb.checked = true;
+        });
+      }
+      // Restore involucrados
+      if (Array.isArray(draft['involucrados']) && draft['involucrados'].length > 0) {
+        const tbody = document.getElementById('involucradosBody');
+        draft['involucrados'].forEach((inv, i) => {
+          if (i > 0) addInvolucradoRow();
+          const row = tbody.rows[i];
+          if (row) {
+            row.querySelector('[data-field="nombre"]').value = inv.nombre || '';
+            row.querySelector('[data-field="email"]').value = inv.email || '';
+            row.querySelector('[data-field="telefono"]').value = inv.telefono || '';
+          }
+        });
+      }
+      // Trigger conditional visibility
+      form.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(el => {
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      // Restore step
+      if (draft._step && draft._step > 1) {
+        showStep(draft._step, 'forward');
+      }
+    }
+
+    // ========== SUPABASE BACKUP ==========
+    async function saveToSupabase(data, status, error) {
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/onboarding_submissions', {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            nombre_empresa: data.nombre_empresa || null,
+            form_data: data,
+            webhook_status: status,
+            webhook_error: error || null
+          })
+        });
+      } catch (e) { console.error('Supabase backup error:', e); }
+    }
 
     // ========== STATE ==========
     let currentStep = 1;
@@ -825,6 +925,7 @@
       currentStep = stepNum;
       buildProgress();
       updateButtons();
+      saveDraft();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -956,6 +1057,8 @@
       btnNext.disabled = true;
       btnNext.innerHTML = '<span class="spinner"></span>Enviando...';
       const data = collectFormData();
+      // Backup to Supabase first
+      await saveToSupabase(data, 'pending', null);
       try {
         const res = await fetch(WEBHOOK_URL, {
           method: 'POST',
@@ -963,9 +1066,12 @@
           body: JSON.stringify(data)
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await saveToSupabase(data, 'sent', null);
+        clearDraft();
         showSuccess();
       } catch (err) {
         console.error('Webhook error:', err);
+        await saveToSupabase(data, 'failed', err.message);
         btnNext.disabled = false;
         btnNext.textContent = 'Reintentar envío';
         const errMsg = document.createElement('div');
@@ -1028,6 +1134,11 @@
       if (err) err.classList.remove('visible');
     });
 
+    // ========== AUTO-SAVE ON INPUT (debounced) ==========
+    let _saveTimer;
+    form.addEventListener('input', () => { clearTimeout(_saveTimer); _saveTimer = setTimeout(saveDraft, 800); });
+    form.addEventListener('change', () => saveDraft());
+
     // ========== INIT ==========
     function init() {
       buildProgress();
@@ -1035,6 +1146,7 @@
       firstStep.classList.add('active');
       requestAnimationFrame(() => { firstStep.classList.add('visible'); });
       updateButtons();
+      restoreDraft();
     }
     init();
   </script>
