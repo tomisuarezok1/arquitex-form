@@ -1350,11 +1350,20 @@ async function submitForm() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     showSuccess();
   } catch (err) {
     console.error('Webhook error:', err);
-    showSuccess();
+    btnNext.disabled = false;
+    btnNext.textContent = 'Reintentar envío';
+    if (!document.getElementById('submitError')) {
+      const errMsg = document.createElement('div');
+      errMsg.id = 'submitError';
+      errMsg.className = 'field-error visible';
+      errMsg.style.cssText = 'text-align:center;margin-top:12px;';
+      errMsg.textContent = 'Error al enviar. Verificá tu conexión e intentá de nuevo.';
+      btnNext.parentElement.appendChild(errMsg);
+    }
   }
 }
 
